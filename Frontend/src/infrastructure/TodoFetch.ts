@@ -3,13 +3,17 @@ import type { ITodoRepository } from "../domain/Irepository/ITodoRepository";
 
 
 export class TodoFetch implements ITodoRepository {
-    private jwt: string;
+    private jwt: string | null;
     private baseURL = "http://localhost:8080/todos";
 
-    constructor(jwt: string) {this.jwt = jwt;}
+    constructor(jwt: string | null) {this.jwt = jwt;}
 
 
     async Create(input: ReqCreateDTO):Promise<void> {
+        if (!this.jwt) {
+            throw new Error("セッションが切れました。ログインしなおしてください")
+        }
+
         const res = await fetch(
             this.baseURL,
             {
@@ -28,6 +32,10 @@ export class TodoFetch implements ITodoRepository {
     }
 
     async FindAll(input: ReqListDTO):Promise<ResTodoDTO[]> {
+         if (!this.jwt) {
+            throw new Error("セッションが切れました。ログインしなおしてください")
+        }
+
         const params = new URLSearchParams();
 
         if (input.title) {
@@ -42,7 +50,7 @@ export class TodoFetch implements ITodoRepository {
         if (input.due_date_to) {
             params.append("due_date_to", input.due_date_to);
         }
-        
+
         const query = params.toString()
         const url = query ? `${this.baseURL}?${params.toString()}` : this.baseURL;
 
@@ -66,6 +74,10 @@ export class TodoFetch implements ITodoRepository {
     }
 
     async FindByID(id: string): Promise<ResTodoDTO> {
+        if (!this.jwt) {
+            throw new Error("セッションが切れました。ログインしなおしてください")
+        }
+
         const res = await fetch(
             `${this.baseURL}/${id}`,
             {
@@ -86,6 +98,10 @@ export class TodoFetch implements ITodoRepository {
     }
 
     async Update(id: string, input: ReqUpdateDTO): Promise<void> {
+         if (!this.jwt) {
+            throw new Error("セッションが切れました。ログインしなおしてください")
+        }
+
         const res = await fetch(
             `${this.baseURL}/${id}`,
             {
@@ -105,6 +121,10 @@ export class TodoFetch implements ITodoRepository {
     }
 
     async Delete(id: string): Promise<void> {
+         if (!this.jwt) {
+            throw new Error("セッションが切れました。ログインしなおしてください")
+        }
+
         const res = await fetch(
             `${this.baseURL}/${id}`,
             {

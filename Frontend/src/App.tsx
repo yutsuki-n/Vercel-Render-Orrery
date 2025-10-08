@@ -1,12 +1,12 @@
-import './App.css';
+import './App.css'
 
 function App() {
-    //Tsコード, componentの内容など
 
   return (
-      // HTMLコード，componentを使い見ためを作る
-      null
-      )
+    <div>
+      <h1>Hello World</h1>
+    </div>
+  )
 }
 
 export default App

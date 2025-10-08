@@ -9,7 +9,7 @@ export class DuplicateUsecase {
         this.todoRepo = todoRepo
     }
 
-    async Execute(id: string) {
+    async Execute(id: string): Promise<void> {
         
         const todo = await this.todoRepo.FindByID(id)
 

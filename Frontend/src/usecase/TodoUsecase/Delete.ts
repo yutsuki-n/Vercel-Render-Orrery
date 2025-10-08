@@ -7,7 +7,7 @@ export class DeleteUsecase {
         this.todoRepo = todoRepo;
     }
 
-    async Execute(id: string) {
+    async Execute(id: string):Promise<void> {
         await this.todoRepo.Delete(id)
     }
 }
