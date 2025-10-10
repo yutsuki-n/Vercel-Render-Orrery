@@ -134,14 +134,17 @@ func (tq TodoRepository) FindByUserIDWithFilters(input valueobject.ListTodoInput
 	fmt.Println("レポジトリ、input", input.Title, input.Body, input.DueDateFrom, input.DueDateTo, input.Completed)
 
 	query := tq.db.Model(&model.Todo{}).Where("user_id = ?", input.UserID.Value())
+	orQuery := tq.db.Model(&model.Todo{})
 
-	if input.Title != nil {
-		query = query.Where("title LIKE ?", "%"+input.Title.Value()+"%")
+	if input.Title != nil && input.Body != nil {
+		query = query.Where("(title LIKE ? OR Body LIKE ?)", "%"+input.Title.Value()+"%", "%"+input.Body.Value()+"%")
+	} else if input.Title != nil {
+		orQuery = orQuery.Where("title LIKE ?", "%"+input.Title.Value()+"%")
+	} else if input.Body != nil {
+		orQuery = orQuery.Where("body LIKE ?", "%"+input.Body.Value()+"%")
 	}
 
-	if input.Body != nil {
-		query = query.Where("body LIKE ?", "%"+input.Body.Value()+"%")
-	}
+	query = query.Where(orQuery)
 
 	if input.DueDateFrom != nil && input.DueDateTo != nil {
 		query = query.Where("due_date BETWEEN ? AND ?", input.DueDateFrom, input.DueDateTo)

@@ -24,6 +24,7 @@ export class ListUsecase {
             completed: (completed === undefined) ? undefined : completed ? "true" : "false"
         }
 
+        console.log("from usecase", ListInput)
         const todos = await this.todoRepo.FindAll(ListInput)
         return todos
     }

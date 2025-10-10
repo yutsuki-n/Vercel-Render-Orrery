@@ -20,11 +20,11 @@ export class UpdateUsecase {
             title: title?.Value(),
             body: body?.Value(),
             due_date: dueDate === undefined ? undefined
-                        : dueDate.Value() === null ? null
+                        : dueDate.Value() === null ? ""
                                 : dueDate.Value()?.toISOString().split("T")[0],
 
             completed_at: completeAt === undefined ? undefined
-                            : completeAt.Value() === null ? null
+                            : completeAt.Value() === null ? ""
                                 : completeAt.Value()?.toISOString().split("T")[0],
         }
 

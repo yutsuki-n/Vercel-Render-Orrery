@@ -5,6 +5,13 @@ import type { ResTodoDTO } from "../../domain/dto/todoDTO";
 import { Delete } from "../../interface/TodoController";
 
 export const Home = () => {
+
+    const [reroadToggle, reroad] = useState<boolean>(true);
+
+    //ユーザー登録系(header転向もあり)
+    const [email, setEmail] = useState<string>();
+    const [rawPassword, setRawPassword] = useState<string>();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalStatus, setModalStatus] = useState("todo作成")
     const handleModal = () => {
@@ -21,9 +28,12 @@ export const Home = () => {
 
     const createSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await Create(title, body, dueDate) 
+        await Create(title, body, dueDate)
+        setTitle("");
+        setBody(undefined);
+        setDueDate(undefined); 
         handleModal();
-        setSearchInput({searchString, searchDueDateFrom, searchDueDateTo, searchCompleted})
+        reroad(prev => !prev);
     }
 
     //検索機能系
@@ -32,33 +42,37 @@ export const Home = () => {
     const [searchDueDateFrom, setSearchDueDateFrom] = useState<Date | undefined>();
     const [searchDueDateTo, setSearchDueDateTo] = useState<Date | undefined>();
     const [searchCompleted, setSearchCompleted] = useState<boolean | undefined>();
-    const [searchInput, setSearchInput] = useState<{} | undefined>(undefined);
     const navigate = useNavigate();
     
     const searchSubmit = (e: React.FormEvent) => {
             e.preventDefault();
-            setSearchInput({searchString, searchDueDateFrom, searchDueDateTo, searchCompleted})
-          }
+            reroad(prev => !prev);
+        }
 
     useEffect( () => {
+        console.log(searchString,searchDueDateFrom,searchDueDateTo,searchCompleted);
         (async () => {const todolist = await List(searchString, searchString, searchDueDateFrom, searchDueDateTo, searchCompleted);
+        //TodoとBodyを分けるときにはGormの改変も行うこと
         setTodos(todolist);}) ();
-    }, [searchInput] )
+    }, [reroadToggle] )
 
     //todoのいろいろ
-    const handleComplete = (id: string) => {
-        Toggle(id)
+    const handleComplete = async (id: string) => {
+        await Toggle(id)
+        reroad(prev =>!prev);
     }
 
-    const handleDuplicate = (id: string) => {
-        Duplicate(id)
+    const handleDuplicate = async (id: string) => {
+        await Duplicate(id)
+        reroad(prev => !prev);
     }
 
-    const handleDelete = (id: string) => {
+    const handleDelete = async (id: string) => {
         const check = window.confirm("本当に削除しますか？");
         if (check) {
-            Delete(id);
+           await Delete(id);
         } 
+        reroad(prev => !prev);
     }
 
     return(
@@ -93,9 +107,9 @@ export const Home = () => {
                 { todos && todos.length > 0 ? (todos.map((todo) => {
                     return ( 
                         <div key={todo.todo_id} >
-                            <h3 onClick={() => navigate(`/todo/${todo.todo_id}`)}>{todo.title}</h3>
-                            <p>{todo.due_date}</p>
-                            <p>{todo.completed_at}</p>
+                            <h3 onClick={() => navigate(`/${todo.todo_id}`)}>{todo.title}</h3>
+                            <p>{todo.due_date ? new Date(todo.due_date).toISOString().split("T")[0] : undefined}</p>
+                            <p>{todo.completed_at ? new Date(todo.completed_at).toISOString().split("T")[0] : undefined}</p>
                             <input type="checkbox" checked={ todo.completed_at != null } onChange={() => handleComplete(todo.todo_id)}></input>
                             <button type="button" onClick={() => handleDuplicate(todo.todo_id)}>コピー</button>
                             <button type="button" onClick={() => handleDelete(todo.todo_id)}>削除</button>

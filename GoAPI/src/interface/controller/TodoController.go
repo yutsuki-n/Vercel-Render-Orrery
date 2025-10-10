@@ -289,7 +289,7 @@ func (tc TodoController) Toggle(c echo.Context) error {
 
 func (tc TodoController) Update(c echo.Context) error {
 	userIDStr := c.Get("UserID").(string)
-	fmt.Println("1 コントローラー,userIDStr", userIDStr)
+	fmt.Println("いち コントローラー,userIDStr", userIDStr)
 	userID, err := valueobject.FromStringUserID(userIDStr)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})

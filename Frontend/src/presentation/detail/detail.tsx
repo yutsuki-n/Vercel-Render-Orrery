@@ -1,51 +1,58 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react"
+import type { ResTodoDTO } from "../../domain/dto/todoDTO";
+import { useNavigate, useParams } from "react-router";
+import { Get, Update } from "../../interface/TodoController";
 
-export const TodoApp = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export const Detail = () => {
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const { id } = useParams<{id: string}>();
+  const [todo, setTodo] = useState<ResTodoDTO>();
+  const [title, setTitle] = useState<string>();
+  const [body, setBody] = useState<string | null>();
+  const [dueDate, setDueDate] = useState<Date | null>();
+  const [completedAt, setCompletedAt] = useState<Date | null>();
+  const navigate = useNavigate();
+ 
+  useEffect( () => {
+    (async () => {
+      if (!id) return <p>不正なアクセスです</p>;
+      const foundTodo = await Get(id);
+      setTodo(foundTodo);
+      setTitle(foundTodo.title);
+      setBody(foundTodo.body);
+      if (foundTodo.due_date) {
+        setDueDate(new Date(foundTodo.due_date))
+      }
+      if (foundTodo.completed_at) {
+        setCompletedAt(new Date(foundTodo.completed_at))
+      }
+    }) ();
+  },[])
 
-  return (
-    <div>
-      <button onClick={openModal}>Todo作成</button>
-
-      {isModalOpen && (
-        <div className="modal">
-          <TodoForm onClose={closeModal} />
-        </div>
-      )}
-    </div>
-  );
-};
-
-const TodoForm = ({ onClose }: { onClose: () => void }) => {
-  const [title, setTitle] = useState("");
-  const [dueDate, setDueDate] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const updateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // ここで Todo 作成処理
-    console.log({ title, dueDate });
-    onClose(); // 作成後にモーダルを閉じる
-  };
+    if (!id) return <p>不正なアクセスです</p>
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <h2>Todo作成</h2>
-      <input
-        type="text"
-        placeholder="タイトル"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <input
-        type="date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-      />
-      <button type="submit">作成</button>
-      <button type="button" onClick={onClose}>キャンセル</button>
-    </form>
-  );
-};
+    console.log("from detail",id,title,body,dueDate,completedAt) 
+    await Update(id, title, body, dueDate, completedAt);
+    navigate("/home")
+  }
+
+  if (!id) return <p>不正なアクセスです</p>
+  if (!todo) return <p>読み込み中...</p>
+
+  return(
+    <>
+      <form onSubmit={updateSubmit}>
+        <input value={title} onChange={(e) => setTitle(e.target.value)}/>
+        <textarea value={body ?? undefined} onChange={(e) => setBody(e.target.value)}/>
+        <input type="date" value={dueDate ? dueDate?.toISOString().split("T")[0] : "" } onChange={(e) => setDueDate(e.target.value ? new Date(e.target.value) : null )}></input>
+        <input type="date" value={completedAt ? completedAt?.toISOString().split("T")[0] : "" } onChange={(e) => setCompletedAt(e.target.value ? new Date(e.target.value) : null)}></input>
+        <p>{new Date(todo.created_at).toISOString().split("T")[0] }</p>
+        <p>{new Date(todo.updated_at).toISOString().split("T")[0] }</p>
+        <button type="submit" >変更して戻る</button>
+      </form>
+      <button onClick={() => navigate("/home")}>変更せず戻る</button>
+    </>
+  )
+}
