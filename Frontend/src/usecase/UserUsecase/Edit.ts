@@ -16,10 +16,10 @@ export class EditUsecase {
                   newRawPassword?: RawPassword): Promise<string> 
     {
         const editInput: ReqEditDTO = {
-            oldEmail: oldEmail.Value(),
-            oldRawPassword: oldRawPassword.Value(),
-            newEmail: newEmail?.Value(),
-            newRawPassword: newRawPassword?.Value()
+            old_email: oldEmail.Value(),
+            old_raw_password: oldRawPassword.Value(),
+            new_email: newEmail?.Value(),
+            new_raw_password: newRawPassword?.Value()
         }
 
         const Token = await this.userRepo.Update(editInput)

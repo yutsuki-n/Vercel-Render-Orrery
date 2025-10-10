@@ -13,13 +13,15 @@ export class ListUsecase {
     async Execute(title?: Title,
                   body?: Body,
                   dueDateFrom?: DueDate,
-                  dueDateTo?: DueDate): Promise<ResTodoDTO[]>
+                  dueDateTo?: DueDate,
+                  completed?: boolean): Promise<ResTodoDTO[]>
     {
         const ListInput: ReqListDTO = {
             title: title?.Value(),
             body: body?.Value() ?? undefined,
             due_date_from: dueDateFrom?.Value()?.toISOString().split("T")[0],
-            due_date_to: dueDateTo?.Value()?.toISOString().split("T")[0]
+            due_date_to: dueDateTo?.Value()?.toISOString().split("T")[0],
+            completed: (completed === undefined) ? undefined : completed ? "true" : "false"
         }
 
         const todos = await this.todoRepo.FindAll(ListInput)

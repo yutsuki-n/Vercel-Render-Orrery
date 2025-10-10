@@ -35,7 +35,7 @@ export const Get = async (id: string): Promise<ResTodoDTO> => {
     return todo;
 }
 
-export const List = async (title?: string, body?: string, dueDateFrom?: Date, dueDateTo?: Date):Promise<ResTodoDTO[]> =>{
+export const List = async (title?: string, body?: string, dueDateFrom?: Date, dueDateTo?: Date, completed?: boolean):Promise<ResTodoDTO[]> =>{
     
     const usecase = new ListUsecase(TF)
     const inputTitle = title ? new Title(title) : undefined;
@@ -43,13 +43,13 @@ export const List = async (title?: string, body?: string, dueDateFrom?: Date, du
     const inputFrom = dueDateFrom ? DueDate.FromExisting(dueDateFrom) : undefined;
     const inputTo = dueDateTo ? DueDate.FromExisting(dueDateTo) : undefined;
 
-    const todos = await usecase.Execute(inputTitle, inputBody, inputFrom, inputTo);
+    const todos = await usecase.Execute(inputTitle, inputBody, inputFrom, inputTo, completed);
     return todos;
 }
 
 export const Toggle = async (id: string): Promise<void> => {
     const usecase = new ToggleUsecase(TF);
-
+    console.log("hellofrom controller, id=", id)
     await usecase.Execute(id);
 }
 

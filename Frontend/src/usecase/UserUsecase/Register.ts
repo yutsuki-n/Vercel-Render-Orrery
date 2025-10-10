@@ -13,7 +13,7 @@ export class RegisterUsecase {
     async Execute(email: Email, rawPassword: RawPassword): Promise<string> {
         const registerInput: ReqSignINDTO = {
             email: email.Value(),
-            rawPassword: rawPassword.Value()
+            raw_password: rawPassword.Value()
         }
 
         const Token = await this.userRepo.Create(registerInput);

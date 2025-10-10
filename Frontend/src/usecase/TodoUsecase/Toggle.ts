@@ -1,5 +1,6 @@
 import type { ReqUpdateDTO } from "../../domain/dto/todoDTO/index";
 import type { ITodoRepository } from "../../domain/Irepository/ITodoRepository";
+import { Toggle } from "../../interface/TodoController";
 
 
 export class ToggleUsecase {
@@ -16,7 +17,7 @@ export class ToggleUsecase {
         const ToggleInput: ReqUpdateDTO = {
             completed_at: todo.completed_at ? null : now.toISOString().split("T")[0]
         }
-
+        console.log("hello from usecase, id=",id,"foundcompleted=",todo.completed_at,"toggleInput=",ToggleInput)
         await this.todoRepo.Update(id, ToggleInput)
     }
 }

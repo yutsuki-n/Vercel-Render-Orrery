@@ -31,6 +31,27 @@ export class TodoFetch implements ITodoRepository {
         }
     }
 
+    async Dupulicate(id: string): Promise<void> {
+         if (!this.jwt) {
+            throw new Error("セッションが切れました。ログインしなおしてください")
+        }
+
+        const res = await fetch(
+            `${this.baseURL}/${id}/duplicate`,
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${this.jwt}`
+                }
+            }
+        );
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.error || "不明なエラー at Delete")
+        }
+    }
+
     async FindAll(input: ReqListDTO):Promise<ResTodoDTO[]> {
          if (!this.jwt) {
             throw new Error("セッションが切れました。ログインしなおしてください")
@@ -49,6 +70,9 @@ export class TodoFetch implements ITodoRepository {
         }
         if (input.due_date_to) {
             params.append("due_date_to", input.due_date_to);
+        }
+        if (input.completed) {
+            params.append("completed", input.completed)
         }
 
         const query = params.toString()
@@ -102,6 +126,7 @@ export class TodoFetch implements ITodoRepository {
             throw new Error("セッションが切れました。ログインしなおしてください")
         }
 
+        console.log("hello from fetch, input=", input, "jsonInput=",JSON.stringify(input))
         const res = await fetch(
             `${this.baseURL}/${id}`,
             {
@@ -119,6 +144,29 @@ export class TodoFetch implements ITodoRepository {
             throw new Error(errorData.error || "不明なエラー at Update")
         }
     }
+
+    async Toggle(id: string): Promise<void> {
+         if (!this.jwt) {
+            throw new Error("セッションが切れました。ログインしなおしてください")
+        }
+
+        const res = await fetch(
+            `${this.baseURL}/${id}/toggle`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Authorization": `Bearer ${this.jwt}`
+                }
+            }
+        );
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.error || "不明なエラー at Delete")
+        }
+    }
+
+
 
     async Delete(id: string): Promise<void> {
          if (!this.jwt) {

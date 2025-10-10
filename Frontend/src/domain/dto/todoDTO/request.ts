@@ -9,6 +9,7 @@ export type ReqListDTO = {
     readonly body?: string;
     readonly due_date_from?: string;
     readonly due_date_to?: string;
+    readonly completed?: string;
 }
 
 export type ReqUpdateDTO = {

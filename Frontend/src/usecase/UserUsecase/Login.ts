@@ -13,8 +13,9 @@ export class LoginUsecase {
     async Execute(email: Email, rawPassword: RawPassword): Promise<string> {
         const loginInput: ReqSignINDTO = {
             email: email.Value(),
-            rawPassword: rawPassword.Value()
+            raw_password: rawPassword.Value()
         }
+        console.log("loginユースケースに届いたemailとpassword", loginInput)
 
         const Token = await this.userRepo.FindByEmail(loginInput)
 

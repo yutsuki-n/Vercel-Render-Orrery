@@ -13,8 +13,9 @@ type RawPassword struct {
 const minPassword = 8
 
 func NewRawPassword(input string) (RawPassword, error) {
+	fmt.Println("これが入力パス", input)
 	if len(input) < minPassword {
-		return RawPassword{}, fmt.Errorf("パスワードは%d文字以上にしてください", minPassword)
+		return RawPassword{}, fmt.Errorf("パスワードは%d文字以上にしてくださaい", minPassword)
 	}
 
 	return RawPassword{rawPassword: input}, nil

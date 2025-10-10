@@ -32,11 +32,11 @@ export class UserFetch implements IUserRepository {
 
         const token: ResTokenDTO = await res.json();
         this.Token = token.token
-        localStorage.setItem("token", this.Token);
         return token
     }
 
     async FindByEmail(input: ReqSignINDTO): Promise<ResTokenDTO> {
+        console.log(input, JSON.stringify(input))
         const res = await fetch(
             `${this.baseURL}/login`,
             {
@@ -55,7 +55,6 @@ export class UserFetch implements IUserRepository {
  
         const token: ResTokenDTO = await res.json();
         this.Token = token.token;
-        localStorage.setItem("token", this.Token);
         return token
     }
 
@@ -79,7 +78,6 @@ export class UserFetch implements IUserRepository {
         
         const token: ResTokenDTO = await res.json();
         this.Token = token.token;
-        localStorage.setItem("token", this.Token);
         return token;
     }
 

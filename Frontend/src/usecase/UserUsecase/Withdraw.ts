@@ -13,7 +13,7 @@ export class WithdrawUsecase {
     async Execute(email: Email, rawPassword: RawPassword): Promise<void> {
         const withdrawInput: ReqSignINDTO = {
             email: email.Value(),
-            rawPassword: rawPassword.Value()
+            raw_password: rawPassword.Value()
         }
         
         await this.userRepo.Delete(withdrawInput)
