@@ -10,15 +10,7 @@ export class DuplicateUsecase {
     }
 
     async Execute(id: string): Promise<void> {
-        
-        const todo = await this.todoRepo.FindByID(id)
 
-        const duplicateInput: ReqCreateDTO = {
-            title: `${todo.title}のコピー`,
-            body: todo.body ? todo.body : undefined,
-            due_date: undefined 
-        }
-
-        this.todoRepo.Create(duplicateInput)
+        this.todoRepo.Dupulicate(id)
     }
 }

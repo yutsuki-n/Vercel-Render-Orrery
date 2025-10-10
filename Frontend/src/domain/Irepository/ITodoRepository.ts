@@ -2,8 +2,10 @@ import type { ReqCreateDTO, ReqListDTO, ReqUpdateDTO, ResTodoDTO } from "../dto/
 
 export interface ITodoRepository {
     Create(input: ReqCreateDTO): Promise<void>;
+    Dupulicate(id: string): Promise<void>;
     FindAll(input: ReqListDTO): Promise<ResTodoDTO[]>;
     FindByID(id: string): Promise<ResTodoDTO>;
     Update(id: string, input: ReqUpdateDTO): Promise<void>;
+    Toggle(id: string): Promise<void>;
     Delete(id: string): Promise<void>;
 }

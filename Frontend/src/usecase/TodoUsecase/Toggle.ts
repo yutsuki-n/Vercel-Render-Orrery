@@ -11,13 +11,8 @@ export class ToggleUsecase {
     }
 
     async Execute(id: string): Promise<void> {
-        const todo = await this.todoRepo.FindByID(id);
 
-        const now = new Date();
-        const ToggleInput: ReqUpdateDTO = {
-            completed_at: todo.completed_at ? null : now.toISOString().split("T")[0]
-        }
-        console.log("hello from usecase, id=",id,"foundcompleted=",todo.completed_at,"toggleInput=",ToggleInput)
-        await this.todoRepo.Update(id, ToggleInput)
+        console.log("hello from usecase, id=",id)
+        await this.todoRepo.Toggle(id)
     }
 }
