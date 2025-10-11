@@ -9,6 +9,8 @@ import { Home } from './presentation/home/home.tsx';
 import { Detail } from './presentation/detail/detail.tsx';
 import { EditProfile } from './presentation/user/edit.tsx';
 import { WithdrawApp } from './presentation/user/withdraw.tsx';
+import { Header } from './presentation/common/header.tsx';
+import './presentation/common/header.css'
 
 const router = createBrowserRouter([
   { path: "/", Component: App },
@@ -22,6 +24,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <Header></Header>
+      <RouterProvider router={router}/>
   </StrictMode>
 )

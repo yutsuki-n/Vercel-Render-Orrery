@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Login } from "../../interface/UserController";
 import { useNavigate } from "react-router";
 
@@ -13,7 +13,10 @@ export const LogIn = () => {
         localStorage.setItem("token", token);
         window.location.href = "/home";
     }
-    
+
+    useEffect(() => {
+        localStorage.removeItem("token");
+    },[])    
 
     return (
         <>

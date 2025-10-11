@@ -9,8 +9,11 @@ export const WithdrawApp = () => {
 
     const handleDelete = async (e: React.FormEvent) => {
         e.preventDefault();
-        await Delete(email, rawPassword);
-        window.location.href = "/login";
+        const check = window.confirm("本当に削除しますか？");
+        if(check) {
+            await Delete(email, rawPassword);
+            window.location.href = "/login";
+        }
     }
 
     return(

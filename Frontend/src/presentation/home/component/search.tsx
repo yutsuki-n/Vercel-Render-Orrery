@@ -18,6 +18,15 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
             reroad(prev => !prev);
         }
 
+    const handleclear = (e: React.FormEvent) => {
+        e.preventDefault();
+        setSearchString(undefined);
+        setSearchDueDateFrom(undefined);
+        setSearchDueDateTo(undefined);
+        setSearchCompleted(undefined);
+        // reroad(prev => !prev) //つけてもいいかも
+    }
+
     useEffect( () => {
         (async () => {const todolist = await List(searchString, searchString, searchDueDateFrom, searchDueDateTo, searchCompleted);
         //TodoとBodyを分けるときにはGormの改変も行うこと
@@ -32,9 +41,10 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
                     <input type="date" className="dueDateTo" value={searchDueDateTo ? searchDueDateTo.toISOString().split("T")[0] : ""} onChange={(e) => setSearchDueDateTo(e.target.value ? new Date(e.target.value) : undefined)}></input>
                     <input type="checkbox" className="completed" checked={ searchCompleted === true } onChange={() => setSearchCompleted(prev => (prev === true ? undefined : true))}></input>
                     <input type="checkbox" className="completed" checked={ searchCompleted === false } onChange={() => setSearchCompleted(prev => (prev === false ? undefined : false))}></input>
+                    <button type="button" onClick={handleclear}>クリア</button>
                     <button type="submit">検索</button>
                 </form>
-            </div>
+        </div>
 
 
     )
