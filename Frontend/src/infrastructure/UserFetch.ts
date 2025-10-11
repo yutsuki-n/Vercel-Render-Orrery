@@ -5,8 +5,12 @@ import type { IUserRepository } from "../domain/Irepository/IUserRepository";
 export class UserFetch implements IUserRepository {
     private Token: string | undefined;
     private baseURL: string = "http://localhost:8080"
-    constructor() {
-        this.Token = undefined
+    constructor(token: string | null) {
+        if (token) {
+            this.Token = token
+        } else {
+            this.Token = undefined
+        }
     }
     
     getToken(): string | undefined {
@@ -59,6 +63,7 @@ export class UserFetch implements IUserRepository {
     }
 
     async Update(input: ReqEditDTO): Promise<ResTokenDTO> {
+        console.log("from fetch, token", this.Token)
         const res = await fetch(
             `${this.baseURL}/users/reset`,
             {
@@ -82,10 +87,11 @@ export class UserFetch implements IUserRepository {
     }
 
     async Delete(input: ReqSignINDTO): Promise<void> {
+        console.log("from fetch", JSON.stringify(input));
         const res = await fetch(
             `${this.baseURL}/users/withdraw`,
             {
-                method: "DELETE",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${this.Token}`
@@ -93,7 +99,8 @@ export class UserFetch implements IUserRepository {
                 body: JSON.stringify(input)
             }
        );
-            
+       console.log("finished fetch") 
+
         if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.error || "不明なエラー at Delete")

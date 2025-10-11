@@ -11,6 +11,7 @@ export const LogIn = () => {
         e.preventDefault()
         const token = await Login(email, rawPassword);
         localStorage.setItem("token", token);
+        window.location.href = "/home";
     }
     
 
@@ -21,7 +22,7 @@ export const LogIn = () => {
                 <input className="rawPassword" type="text" value={rawPassword} onChange = {(e) => setRawPassword(e.target.value)} />
                 <button type="submit">Login</button>
             </form>
-            <button onClick={() => navigate("/register")}>Sign Up</button>
+            <button onClick={() => navigate("/signup")}>Sign Up</button>
         </>
     )
 }

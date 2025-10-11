@@ -26,7 +26,7 @@ func main() {
 	userAuthGroup := e.Group("/users")
 	userAuthGroup.Use(CustomMiddleware.AuthMiddleware)
 	userAuthGroup.PATCH("/reset", userController.Reset)
-	userAuthGroup.DELETE("/withdrawal", userController.Withdraw)
+	userAuthGroup.POST("/withdraw", userController.Withdraw)
 
 	todoController := di.InitializeTodoController()
 	todoAuthGroup := e.Group("/todos")

@@ -7,6 +7,8 @@ import { LogIn } from './presentation/top/LogIn.tsx';
 import { SignUp } from './presentation/top/SignUp.tsx';
 import { Home } from './presentation/home/home.tsx';
 import { Detail } from './presentation/detail/detail.tsx';
+import { EditProfile } from './presentation/user/edit.tsx';
+import { WithdrawApp } from './presentation/user/withdraw.tsx';
 
 const router = createBrowserRouter([
   { path: "/", Component: App },
@@ -14,6 +16,8 @@ const router = createBrowserRouter([
   { path: "/signup", Component: SignUp},
   { path: "/home", Component: Home},
   { path: "/:id", Component: Detail},
+  { path: "/edit", Component: EditProfile},
+  { path: "/withdraw", Component: WithdrawApp},
 ])
 
 createRoot(document.getElementById('root')!).render(

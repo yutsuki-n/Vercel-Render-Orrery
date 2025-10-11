@@ -11,6 +11,7 @@ export const SignUp = () => {
         e.preventDefault()
         const token = await Register(email, rawPassword);
         localStorage.setItem("token", token);
+        window.location.href = "/home"
     }
     
 

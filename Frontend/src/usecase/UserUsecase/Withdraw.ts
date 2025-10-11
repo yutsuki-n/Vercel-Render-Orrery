@@ -15,7 +15,7 @@ export class WithdrawUsecase {
             email: email.Value(),
             raw_password: rawPassword.Value()
         }
-        
+        console.log("from usecase", email, rawPassword)
         await this.userRepo.Delete(withdrawInput)
     }
 }

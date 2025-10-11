@@ -5,8 +5,8 @@ import { LoginUsecase } from "../usecase/UserUsecase/Login";
 import { RegisterUsecase } from "../usecase/UserUsecase/Register";
 import { WithdrawUsecase } from "../usecase/UserUsecase/Withdraw";
 
-
-const UF = new UserFetch();
+const token = localStorage.getItem("token");
+const UF = new UserFetch(token);
 
 export const Register = async (email: string, rawPassword: string): Promise<string> => {
     const usecase = new RegisterUsecase(UF);
@@ -30,9 +30,10 @@ export const Edit = async (oldEmail: string, oldRawPassword: string, newEmail?: 
     const usecase = new EditUsecase(UF);
     const inputOldEmail = new Email(oldEmail);
     const inputOldRawPassword = new RawPassword(oldRawPassword);
-    const inputNewEmail = newEmail ? new Email(newEmail) : undefined;
-    const inputNewRawPassword = newRawPassword ? new RawPassword(newRawPassword) : undefined;
+    const inputNewEmail = (newEmail && newEmail != "") ? new Email(newEmail) : undefined;
+    const inputNewRawPassword = (newRawPassword && newRawPassword != "") ? new RawPassword(newRawPassword) : undefined;
 
+    console.log("from controller", inputNewEmail, inputNewRawPassword)
     const token = await usecase.Execute(inputOldEmail, inputOldRawPassword, inputNewEmail, inputNewRawPassword);
     return token;
 }

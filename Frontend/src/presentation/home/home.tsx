@@ -9,17 +9,25 @@ export const Home = () => {
     const [reroadToggle, reroad] = useState<boolean>(true);
 
     //ユーザー登録系(header転向もあり)
-    const [email, setEmail] = useState<string>();
-    const [rawPassword, setRawPassword] = useState<string>();
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalStatus, setModalStatus] = useState("todo作成")
-    const handleModal = () => {
-        setIsModalOpen(prev => !prev)
-        if (isModalOpen) {
-            setModalStatus("todo作成")
+    const [userModalOpen, setUserModalOpen] = useState(false);
+    const [userModalStatus, setUserModalStatus] = useState("ユーザー管理")
+    const handleUserModal = () => {
+        setUserModalOpen(prev => !prev)
+        if (userModalOpen) {
+            setUserModalStatus("ユーザー管理")
         } else {
-            setModalStatus("閉じる")
+            setUserModalStatus("閉じる")
+        }
+    }
+
+    const [createModalOpen, setCreateModalOpen] = useState(false);
+    const [createModalStatus, setCreateModalStatus] = useState("todo作成")
+    const handleCreateModal = () => {
+        setCreateModalOpen(prev => !prev)
+        if (createModalOpen) {
+            setCreateModalStatus("todo作成")
+        } else {
+            setCreateModalStatus("閉じる")
         }
     }
     const [title, setTitle] = useState<string>("");
@@ -32,7 +40,7 @@ export const Home = () => {
         setTitle("");
         setBody(undefined);
         setDueDate(undefined); 
-        handleModal();
+        handleCreateModal();
         reroad(prev => !prev);
     }
 
@@ -52,9 +60,10 @@ export const Home = () => {
     useEffect( () => {
         console.log(searchString,searchDueDateFrom,searchDueDateTo,searchCompleted);
         (async () => {const todolist = await List(searchString, searchString, searchDueDateFrom, searchDueDateTo, searchCompleted);
+        console.log("入ってすぐのリロード調査",todolist)
         //TodoとBodyを分けるときにはGormの改変も行うこと
         setTodos(todolist);}) ();
-    }, [reroadToggle] )
+    }, [reroadToggle] );
 
     //todoのいろいろ
     const handleComplete = async (id: string) => {
@@ -78,6 +87,16 @@ export const Home = () => {
     return(
         <>
             <div>
+                {userModalOpen && (
+                    <div className="modal">
+                        <button onClick={() => navigate("/edit")}>変更</button>
+                        <button onClick={() => navigate("/withdraw")}>削除</button>
+                    </div>
+                )}
+                <button onClick={handleUserModal}>{userModalStatus}</button>
+            </div>
+
+            <div>
                 <form onSubmit={searchSubmit}>
                     <input className="title" value={searchString ? searchString : ""} onChange={(e) => setSearchString(e.target.value ? e.target.value : undefined)}></input>
                     <input type="date" className="dueDateFrom" value={searchDueDateFrom ? searchDueDateFrom?.toISOString().split("T")[0] : ""} onChange={(e) => setSearchDueDateFrom(e.target.value ? new Date(e.target.value) : undefined)}></input>
@@ -89,7 +108,7 @@ export const Home = () => {
             </div>
 
             <div>
-                {isModalOpen && (
+                {createModalOpen && (
                     <div className="modal">
                         <form onSubmit={createSubmit}>
                             <input placeholder="タイトル(必須)" className="title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
@@ -100,7 +119,7 @@ export const Home = () => {
                     </div>
                 )}
 
-                <button onClick={handleModal}>{modalStatus}</button>
+                <button onClick={handleCreateModal}>{createModalStatus}</button>
             </div>
 
             <div>
