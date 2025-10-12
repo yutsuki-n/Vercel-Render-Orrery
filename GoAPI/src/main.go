@@ -5,6 +5,7 @@ import (
 	"GoAPI/src/di"
 	CustomMiddleware "GoAPI/src/interface/middleware"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/labstack/echo/v4"
@@ -25,6 +26,10 @@ func main() {
 		AllowHeaders:     []string{"Authorization", "Content-Type"},
 		AllowCredentials: true,
 	}))
+
+	e.OPTIONS("/*", func(c echo.Context) error {
+		return c.NoContent(http.StatusOK)
+	})
 
 	e.Static("/", "Frontend/dist")
 	e.File("/*", "Frontend/dist/index.html")
