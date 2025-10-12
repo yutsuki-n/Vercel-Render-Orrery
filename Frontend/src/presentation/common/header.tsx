@@ -36,7 +36,7 @@ export const Header = () => {
 
     return(
         <header className="stycky top-0 z-20 bg-blue-900 text-white 
-                           h-15 items-center mb-4">
+                           h-15 items-center mb-8">
 
             <div className="h-15 flex justify-between w-[90%] mx-auto items-center">    
                 { token ? null :

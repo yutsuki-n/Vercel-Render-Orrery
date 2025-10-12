@@ -10,11 +10,13 @@ import { Detail } from './presentation/detail/detail.tsx';
 import { EditProfile } from './presentation/user/edit.tsx';
 import { WithdrawApp } from './presentation/user/withdraw.tsx';
 import { Header } from './presentation/common/header.tsx';
+import { Footer } from './presentation/common/footer.tsx';
 
 const RootLayout = () => (
   <>
     <Header/>
     <Outlet/>
+    <Footer/>
   </>
 );
 

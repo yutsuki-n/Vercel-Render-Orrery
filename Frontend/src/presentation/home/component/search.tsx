@@ -41,7 +41,7 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
 
     return (
         <div>
-                <form className="mt-15 w-[90%] mx-auto" onSubmit={searchSubmit}>
+                <form className="mt-25 w-[90%] mx-auto" onSubmit={searchSubmit}>
                     <h1 className="text-[25px] text-blue-800">Search</h1>     
                         <div className="flex justify-between">
                             <Input placeholder="キーワード" className="w-[45%] border-0 border-b-2 border-gray-400 

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react"
 import type { ResTodoDTO } from "../../domain/dto/todoDTO";
 import { useNavigate, useParams } from "react-router";
 import { Get, Update } from "../../interface/TodoController";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export const Detail = () => {
 
@@ -11,6 +14,7 @@ export const Detail = () => {
   const [body, setBody] = useState<string | null>();
   const [dueDate, setDueDate] = useState<Date | null>();
   const [completedAt, setCompletedAt] = useState<Date | null>();
+  const [error, setError] = useState("");
   const navigate = useNavigate();
  
   useEffect( () => {
@@ -33,26 +37,65 @@ export const Detail = () => {
     e.preventDefault();
     if (!id) return <p>不正なアクセスです</p>
 
-    console.log("from detail",id,title,body,dueDate,completedAt) 
-    await Update(id, title, body, dueDate, completedAt);
-    navigate("/home")
+    try {
+      console.log("from detail",id,title,body,dueDate,completedAt) 
+      await Update(id, title, body, dueDate, completedAt);
+      navigate("/home")
+    } catch (err: any) {
+      setError(err.message || "ログインに失敗しました")
+    }
   }
 
   if (!id) return <p>不正なアクセスです</p>
   if (!todo) return <p>読み込み中...</p>
 
   return(
-    <>
-      <form onSubmit={updateSubmit}>
-        <input value={title} onChange={(e) => setTitle(e.target.value)}/>
-        <textarea value={body ?? undefined} onChange={(e) => setBody(e.target.value)}/>
-        <input type="date" value={dueDate ? dueDate?.toISOString().split("T")[0] : "" } onChange={(e) => setDueDate(e.target.value ? new Date(e.target.value) : null )}></input>
-        <input type="date" value={completedAt ? completedAt?.toISOString().split("T")[0] : "" } onChange={(e) => setCompletedAt(e.target.value ? new Date(e.target.value) : null)}></input>
-        <p>{new Date(todo.created_at).toISOString().split("T")[0] }</p>
-        <p>{new Date(todo.updated_at).toISOString().split("T")[0] }</p>
-        <button type="submit" >変更して戻る</button>
+    <div className="w-[90%] mx-auto">
+      <div className="flex justify-between">
+        <h2 className="text-[25px] text-blue-800" >Details</h2>
+        <div className="text-right w-[80%] mx-auto text-blue-900">
+          <p>作成日：{new Date(todo.created_at).toISOString().split("T")[0] }</p>
+          <p>最終更新日：{new Date(todo.updated_at).toISOString().split("T")[0] }</p>
+        </div>
+      </div>
+      <div className="flex justify-between w-[90%] mx-auto mt-8 items-center">
+        {error && (
+            <p className=" text-red-500">{error}</p>
+        )}
+        <Button className="w-[35%] bg-blue-950 hover:bg-blue-900" onClick={() => navigate("/home")}>変更せず戻る</Button>
+      </div>
+      <form className="mt-3" onSubmit={updateSubmit}>
+        <h1 className="text-[18px] pt-5 mb-2 pl-1 font-bold text-blue-800">title</h1>
+        <Input className="mb-5 border-0 border-b-2 border-gray-400 
+                                              focus:border-blue-700 rounded-none 
+                                              shadow-none focus:outline-none focus-visible:ring-0
+                                              focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" 
+               value={title} onChange={(e) => setTitle(e.target.value)}/>
+
+        <h1 className="text-[18px] pt-5 mb-2 pl-1 font-bold text-blue-800">about</h1>
+        <Textarea className="mb-5 resize-none h-30 border-0 border-l-2 border-gray-400 
+                                              focus:border-blue-700 rounded-none 
+                                              shadow-none focus:outline-none focus-visible:ring-0
+                                              focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" 
+                  value={body ?? undefined} onChange={(e) => setBody(e.target.value)}/>
+
+        <h1 className="text-[18px] pt-5 mb-2 pl-1 font-bold text-blue-800">Due date</h1>
+        <Input className="mb-5 border-0 border-b-2 border-gray-400 
+                                              focus:border-blue-700 rounded-none 
+                                              shadow-none focus:outline-none focus-visible:ring-0
+                                              focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" 
+              type="date" value={dueDate ? dueDate?.toISOString().split("T")[0] : "" } 
+              onChange={(e) => setDueDate(e.target.value ? new Date(e.target.value) : null )}></Input>
+
+        <h1 className="text-[18px] pt-5 mb-2 pl-1 font-bold text-blue-800">Completed</h1>
+        <Input className="mb-5 border-0 border-b-2 border-gray-400 
+                                              focus:border-blue-700 rounded-none 
+                                              shadow-none focus:outline-none focus-visible:ring-0
+                                              focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" 
+              type="date" value={completedAt ? completedAt?.toISOString().split("T")[0] : "" } 
+              onChange={(e) => setCompletedAt(e.target.value ? new Date(e.target.value) : null)}></Input>
+        <Button className="mt-15 w-120 mx-auto block bg-blue-950 hover:bg-blue-900" type="submit" >変更して戻る</Button>
       </form>
-      <button onClick={() => navigate("/home")}>変更せず戻る</button>
-    </>
+    </div>
   )
 }
