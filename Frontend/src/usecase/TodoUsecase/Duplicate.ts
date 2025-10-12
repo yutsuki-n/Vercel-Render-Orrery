@@ -1,4 +1,3 @@
-import type { ReqCreateDTO } from "../../domain/dto/todoDTO/index";
 import type { ITodoRepository } from "../../domain/Irepository/ITodoRepository";
 
 

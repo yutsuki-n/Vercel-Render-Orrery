@@ -41,7 +41,7 @@ export const Header = () => {
             <div className="h-15 flex justify-between w-[90%] mx-auto items-center">    
                 { token ? null :
                     <div className="text-[22px]" >
-                        Orrary
+                        Orrery
                     </div>
                      
                 }
@@ -49,7 +49,7 @@ export const Header = () => {
                 { token &&
                     <>
                         <div className="cursor-pointer text-[22px]" onClick={() => window.location.href="/home"} >
-                            Orrary
+                            Orrery
                         </div>
                         <div className="w-[50%] flex justify-end">
                             <div className="flex">
