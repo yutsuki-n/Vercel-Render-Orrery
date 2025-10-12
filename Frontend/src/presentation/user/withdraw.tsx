@@ -16,7 +16,7 @@ export const WithdrawApp = () => {
         if(check) {
             try {
                 await Delete(email, rawPassword);
-                window.location.href = "/login";
+                window.location.href = "/";
             } catch (err: any) {
                 setError(err.message || "ログインに失敗しました")
             }

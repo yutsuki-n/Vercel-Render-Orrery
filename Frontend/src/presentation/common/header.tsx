@@ -31,7 +31,7 @@ export const Header = () => {
     const handleLogout = (e: React.FormEvent) => {
         e.preventDefault();
         localStorage.removeItem("token");
-        window.location.href = "/login"
+        window.location.href = "/"
     }
 
     return(
