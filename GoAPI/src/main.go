@@ -5,6 +5,7 @@ import (
 	"GoAPI/src/di"
 	CustomMiddleware "GoAPI/src/interface/middleware"
 	"fmt"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -39,6 +40,11 @@ func main() {
 	todoAuthGroup.DELETE("/:TodoID", todoController.Delete)
 	todoAuthGroup.POST("/:TodoID/duplicate", todoController.Duplicate)
 
-	fmt.Println("server start at http://localhost:8080")
-	e.Logger.Fatal(e.Start(":8080"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		fmt.Println("server start at http://localhost:8080")
+	}
+
+	e.Logger.Fatal(e.Start(":" + port))
 }
