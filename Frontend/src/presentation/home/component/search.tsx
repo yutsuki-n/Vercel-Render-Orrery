@@ -49,8 +49,8 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
                                                 shadow-none focus:outline-none focus-visible:ring-0
                                                 focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" value={searchString ? searchString : ""} onChange={(e) => setSearchString(e.target.value ? e.target.value : undefined)}></Input>
                             <div className="flex justify-between w-[45%] mr-0">
-                                <Button className="w-[45%] bg-blue-950 hover:bg-blue-900" type="button" onClick={handleclear}>clear</Button>
                                 <Button className="w-[45%] bg-blue-950 hover:bg-blue-900" type="submit">search</Button>
+                                <Button className="w-[45%] bg-blue-950 hover:bg-blue-900" type="button" onClick={handleclear}>clear</Button>
                             </div>
                         </div>
                         <div className="flex justify-between items-center">

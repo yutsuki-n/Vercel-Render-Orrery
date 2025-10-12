@@ -48,7 +48,7 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
 
                 { todos && todos.length > 0 ? (todos.map((todo) => {
                     return ( 
-                        <div className="w-[90%] mx-auto mt-10 border-l-2 border-blue-700 pl-3" key={todo.todo_id} >
+                        <div className="w-[90%] mx-auto mt-10 border-l-2 border-blue-700 pl-3 mb-10" key={todo.todo_id} >
                             <div className="flex justify-between items-center">
                                 <h2 className="text-[20px] my-3 ml-1 text-blue-800 font-bold cursor-pointer inline-block" onClick={() => navigate(`/${todo.todo_id}`)}>{todo.title}</h2>
                                 <div className="w-[40%] flex justify-between mr-3">
@@ -68,7 +68,10 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
                             </div>
                         </div>
                         )
-                    })) : (<p>Todoがありません</p>)
+                    })) : ( <div className="w-[90%] mx-auto mt-10 text-blue-800">
+                            <p className="text-[18px]">Todoがありません</p>
+                            </div>
+                          )
                 }
             </div>
 
