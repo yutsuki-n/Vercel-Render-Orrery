@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: orrery-backend
+    repo: https://github.com/yutsuki-n/Vercel-Render-Orrery
+    branch: main
+    env: Go
+    plan: free
+    buildCommand: go build -o orrery-backend ./src
+    startCommand: ./orrery-backend
