@@ -9,15 +9,20 @@ export const EditProfile = () => {
     const [oldEmail, setOldEmail] = useState<string>("")
     const [oldRawPassword, setOldRawPassword] = useState<string>("")
     const [newEmail, setNewEmail] = useState<string>("")
+    const [error, setError] = useState("");
     const [newRawPassword, setNewRawPassword] = useState<string>("")
 
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("from edit", newEmail, newRawPassword)
-        const token = await Edit(oldEmail, oldRawPassword, newEmail, newRawPassword)
-        localStorage.setItem("token", token);
+        try {
+            console.log("from edit", newEmail, newRawPassword)
+            const token = await Edit(oldEmail, oldRawPassword, newEmail, newRawPassword)
+            localStorage.setItem("token", token);
+        } catch (err: any) {
+            setError(err.message || "ログインに失敗しました")
+        }
     }
 
     return (
@@ -25,7 +30,11 @@ export const EditProfile = () => {
             <div className="flex justify-end w-[90%] mx-auto">
                 <Button className="w-[35%] bg-blue-950 hover:bg-blue-900"  onClick={() => navigate("/home")}>変更せずに戻る</Button>
             </div>
+
             <form className="w-[90%] mx-auto" onSubmit={handleSubmit}>
+                {error && (
+                    <p className="fixed top-20 text-red-500">{error}</p>
+                )}
                 <div>
                     <p className="text-[20px] my-4 text-blue-800 font-bold">アカウント確認</p>
                     <p className="text-xs">現在のメールアドレス</p>

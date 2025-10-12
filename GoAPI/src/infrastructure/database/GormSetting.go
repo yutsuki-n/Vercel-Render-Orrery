@@ -14,6 +14,7 @@ import (
 func NewGorm() *gorm.DB {
 	err := godotenv.Load()
 	if err != nil {
+		fmt.Println("接続エラー", err)
 		panic("システムエラー")
 	}
 	dsn := os.Getenv("DB_CONNECTION")

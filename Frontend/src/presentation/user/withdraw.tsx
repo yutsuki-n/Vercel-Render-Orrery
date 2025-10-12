@@ -7,14 +7,19 @@ import { Input } from "@/components/ui/input"
 export const WithdrawApp = () => {
     const [email, setEmail] = useState("");
     const [rawPassword, setRawPassword] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleDelete = async (e: React.FormEvent) => {
         e.preventDefault();
         const check = window.confirm("本当に削除しますか？");
         if(check) {
-            await Delete(email, rawPassword);
-            window.location.href = "/login";
+            try {
+                await Delete(email, rawPassword);
+                window.location.href = "/login";
+            } catch (err: any) {
+                setError(err.message || "ログインに失敗しました")
+            }
         }
     }
 
@@ -24,6 +29,9 @@ export const WithdrawApp = () => {
                 <Button className="w-[30%] bg-blue-950 hover:bg-blue-900" onClick={() => navigate("/home")}>戻る</Button>
             </div>
             <form  onSubmit={handleDelete}>
+                {error && (
+                    <p className="fixed top-20 text-red-500">{error}</p>
+                )}
                 <p className="my-4 text-[20px] text-blue-800 font-bold mb-10">アカウント削除</p>
                 <p className="text-xs">メールアドレス</p>
                 <Input className="mb-3 border-0 border-b-2 border-gray-400 
