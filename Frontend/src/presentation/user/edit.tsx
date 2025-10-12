@@ -20,6 +20,7 @@ export const EditProfile = () => {
             console.log("from edit", newEmail, newRawPassword)
             const token = await Edit(oldEmail, oldRawPassword, newEmail, newRawPassword)
             localStorage.setItem("token", token);
+            window.location.href="/home";
         } catch (err: any) {
             setError(err.message || "ログインに失敗しました")
         }
