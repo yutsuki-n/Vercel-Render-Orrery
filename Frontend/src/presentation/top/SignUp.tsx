@@ -63,7 +63,7 @@ export const SignUp = () => {
                 </div>
                 <Button className="mt-7 w-3/4 md:w-2/3 lg:w-4/7 mx-auto block bg-blue-400
                                    hover:bg-blue-500" 
-                                  onClick={() => navigate("/login")}>Log in</Button>
+                                  onClick={() => navigate("/")}>Log in</Button>
             </div>
         </>
     )
