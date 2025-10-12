@@ -6,17 +6,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func NewGorm() *gorm.DB {
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println("接続エラー", err)
-		panic("システムエラー")
-	}
+
 	dsn := os.Getenv("DB_CONNECTION")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
