@@ -10,7 +10,7 @@ export class DueDate {
         yesterday.setDate(now.getDate() - 1);
         
         if (future && future <= yesterday) {
-            throw new Error("期日は現在以降の日付にしてください")
+            throw new Error("期日はxx現在以降の日付にしてください")
         } else {
             return new DueDate(future)
         }
