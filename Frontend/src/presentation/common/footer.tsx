@@ -3,7 +3,7 @@
 export const Footer = () => {
 
     return (
-        <footer className="w-full h-30 bg-slate-700 mt-20 text-white">
+        <footer className="w-full h-30 bg-slate-700 text-white">
             <div className="h-30 flex justify-between w-[90%] mx-auto items-center">
                 <h2 className="text-[22px]">Orrery</h2>
                 <div>

@@ -36,11 +36,11 @@ export const LogIn = () => {
                 <h1 className="text-[30px] font-medium text-blue-900">ログイン</h1>
 
                 {error && (
-                    <p className="fixed top-32 text-red-500">{error}</p>
+                    <p className="pt-4 text-red-500">{error}</p>
                 )}
 
                 <div>
-                    <form onSubmit={handleSubmit} className="pt-15">
+                    <form onSubmit={handleSubmit} className="pt-10">
                         <div>
                             <p className="text-xs">メールアドレス</p>
                             <Input className="border-0 border-b-2 border-gray-400 
