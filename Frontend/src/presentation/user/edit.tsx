@@ -22,7 +22,10 @@ export const EditProfile = () => {
             localStorage.setItem("token", token);
             window.location.href="/home";
         } catch (err: any) {
-            setError(err.message || "ログインに失敗しました")
+            setError(err.message || "セッションが切れました")
+            if (err.message === "セッションが切れました") {
+                navigate("/login", {state: { msg: "セッションが切れました"}});
+            }
         }
     }
 
@@ -62,7 +65,7 @@ export const EditProfile = () => {
                                                 shadow-none focus:outline-none focus-visible:ring-0
                                                 focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" placeholder="新しいパスワード(任意)" value={newRawPassword} onChange={(e)=>setNewRawPassword(e.target.value)}></Input>
                 </div>
-                <Button className="w-120 mx-auto block bg-blue-950 hover:bg-blue-900" type="submit">更新</Button>
+                <Button className="w-[60%] mx-auto block bg-blue-950 hover:bg-blue-900" type="submit">更新</Button>
             </form>
         </>
     )

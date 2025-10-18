@@ -14,7 +14,10 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
             await Toggle(id)
             reroad(prev =>!prev);
         } catch (err: any) {
-            setError(err.message || "ログインに失敗しました")
+            setError(err.message || "セッションが切れました")
+            if (err.message?.includes("セッション")) {
+                navigate("/", {state: {msg: "セッションが切れました"}});
+            }
         }
     }
 
@@ -24,7 +27,10 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
             await new Promise(resolve => setTimeout(resolve, 100));
             reroad(prev => !prev);
         } catch (err: any) {
-            setError(err.message || "ログインに失敗しました")
+            setError(err.message || "セッションが切れました")
+            if (err.message?.includes("セッション")) {
+                navigate("/", {state: {msg: "セッションが切れました"}});
+            }
         }
     }
 
@@ -34,7 +40,10 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
             try {
                 await Delete(id);
             } catch (err: any) {
-                setError(err.message || "ログインに失敗しました")
+                setError(err.message || "セッションが切れました")
+                if (err.message?.includes("セッション")) {
+                    navigate("/", {state: {msg: "セッションが切れました"}});
+                }
             }
         } 
         reroad(prev => !prev);

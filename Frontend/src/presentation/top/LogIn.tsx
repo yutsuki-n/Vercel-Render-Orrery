@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Login } from "../../interface/UserController";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -8,11 +8,25 @@ export const LogIn = () => {
     const [email, setEmail] = useState("");
     const [rawPassword, setRawPassword] = useState("");
     const [error, setError] = useState("");
+    const [message, setMessage] = useState<string | null>(null)
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state?.msg) {
+            setMessage(location.state.msg);
+            navigate(location.pathname, { replace: true});
+        }
+    }, [location, navigate]);
+    
+    useEffect(() => {
+        ( async () => await localStorage.removeItem("token")) ();
+    },[])    
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError("");
+        
 
         try {
             const token = await Login(email, rawPassword);
@@ -26,9 +40,6 @@ export const LogIn = () => {
         }
     }
 
-    useEffect(() => {
-        ( async () => await localStorage.removeItem("token")) ();
-    },[])    
 
     return (
         <>
@@ -37,6 +48,10 @@ export const LogIn = () => {
 
                 {error && (
                     <p className="pt-4 text-red-500">{error}</p>
+                )}
+
+                {message && (
+                    <div className="text-red-500"> {message} </div>
                 )}
 
                 <div>

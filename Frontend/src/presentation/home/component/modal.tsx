@@ -22,8 +22,8 @@ export const CreateModal = ({reroad}:{reroad: React.Dispatch<React.SetStateActio
                 </DialogTrigger>
 
                 <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Todo作成</DialogTitle>
+                    <DialogHeader className="w-[90%] mx-auto pt-3">
+                        <DialogTitle className="w-full mx-auto text-blue-800">Todo作成</DialogTitle>
                         <DialogDescription>
                             忘れないように
                         </DialogDescription>

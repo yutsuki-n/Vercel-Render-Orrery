@@ -18,7 +18,10 @@ export const WithdrawApp = () => {
                 await Delete(email, rawPassword);
                 window.location.href = "/";
             } catch (err: any) {
-                setError(err.message || "ログインに失敗しました")
+                setError(err.message || "セッションが切れました")
+            if (err.message === "セッションが切れました") {
+                navigate("/login", {state: { msg: "セッションが切れました"}});
+            }
             }
         }
     }
@@ -43,7 +46,7 @@ export const WithdrawApp = () => {
                                                 focus:border-blue-700 rounded-none 
                                                 shadow-none focus:outline-none focus-visible:ring-0
                                                 focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" placeholder="パスワード(必須)" value={rawPassword} onChange={(e) => setRawPassword(e.target.value)}></Input>
-                <Button className="w-120 mx-auto block bg-blue-950 hover:bg-blue-900" type="submit">アカウント削除</Button>
+                <Button className="w-[60%] mx-auto block bg-blue-950 hover:bg-blue-900" type="submit">アカウント削除</Button>
             </form>
         </div>
     )    
