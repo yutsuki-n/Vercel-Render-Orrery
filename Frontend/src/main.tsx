@@ -13,9 +13,13 @@ import { Footer } from './presentation/common/footer.tsx';
 
 const RootLayout = () => (
   <>
-    <Header/>
-    <Outlet/>
-    <Footer/>
+    <div className='flex flex-col min-h-screen'>
+      <Header/>
+      <main className='flex-1 py-8'>
+        <Outlet/>
+      </main>
+      <Footer/>
+    </div>
   </>
 );
 

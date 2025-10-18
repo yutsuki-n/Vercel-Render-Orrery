@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type { ResTodoDTO } from "../../domain/dto/todoDTO";
-import { CreateModal } from "./component/createTodo";
+import { CreateModal } from "./component/modal";
 import { Search } from "./component/search";
 import { TodoList } from "./component/todoList";
 

@@ -26,7 +26,7 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
         setSearchDueDateFrom(undefined);
         setSearchDueDateTo(undefined);
         setSearchCompleted(undefined);
-        // reroad(prev => !prev) //つけてもいいかも
+        reroad(prev => !prev); 
     }
 
     useEffect( () => {
@@ -41,7 +41,7 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
 
     return (
         <div>
-                <form className="mt-25 w-[90%] mx-auto" onSubmit={searchSubmit}>
+                <form className="mt-8 w-[90%] mx-auto" onSubmit={searchSubmit}>
                     <h1 className="text-[25px] text-blue-800">Search</h1>     
                         <div className="flex justify-between">
                             <Input placeholder="キーワード" className="w-[45%] border-0 border-b-2 border-gray-400 
@@ -54,23 +54,26 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
                             </div>
                         </div>
                         <div className="flex justify-between items-center">
-                            <div className="mt-10 flex justify-between items-center w-[55%]">
-                                <div className="w-[45%]">
-                                    <p>Due date  From</p>
-                                    <Input type="date" className="border-0 border-b-2 border-gray-400 
+                            <div className="mt-10 w-[55%]">
+                                <p className="mb-2">Due date</p>
+                                <div className="flex justify-between items-center">
+                                    <div className="w-[45%]">
+                                        <p>From</p>
+                                        <Input type="date" className="border-0 border-b-2 border-gray-400 
+                                                            focus:border-blue-700 rounded-none 
+                                                            shadow-none focus:outline-none focus-visible:ring-0
+                                                            focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" value={searchDueDateFrom ? searchDueDateFrom?.toISOString().split("T")[0] : ""} onChange={(e) => setSearchDueDateFrom(e.target.value ? new Date(e.target.value) : undefined)}></Input>
+                                    </div>
+                                    <div className="w-[45%]">
+                                        <p>To</p>
+                                        <Input type="date" className="border-0 border-b-2 border-gray-400 
                                                         focus:border-blue-700 rounded-none 
                                                         shadow-none focus:outline-none focus-visible:ring-0
-                                                        focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" value={searchDueDateFrom ? searchDueDateFrom?.toISOString().split("T")[0] : ""} onChange={(e) => setSearchDueDateFrom(e.target.value ? new Date(e.target.value) : undefined)}></Input>
-                                </div>
-                                <div className="w-[45%]">
-                                    <p>To</p>
-                                    <Input type="date" className="border-0 border-b-2 border-gray-400 
-                                                    focus:border-blue-700 rounded-none 
-                                                    shadow-none focus:outline-none focus-visible:ring-0
-                                                    focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" value={searchDueDateTo ? searchDueDateTo.toISOString().split("T")[0] : ""} onChange={(e) => setSearchDueDateTo(e.target.value ? new Date(e.target.value) : undefined)}></Input>
+                                                        focus-visible:ring-offset-0 bg-transparent focus:bg-transparent" value={searchDueDateTo ? searchDueDateTo.toISOString().split("T")[0] : ""} onChange={(e) => setSearchDueDateTo(e.target.value ? new Date(e.target.value) : undefined)}></Input>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex w-[25%] mx-auto pt-7 justify-between">
+                            <div className="flex w-[25%] mx-auto pt-10 justify-between">
                                 <div>
                                     <p className="mx-auto">完了</p>
                                     <Input type="checkbox" className="mx-auto w-7 h-7 border-0 border-b-2 border-gray-400 
