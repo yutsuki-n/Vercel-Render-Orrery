@@ -10,7 +10,8 @@ type DueDate struct {
 }
 
 func NewDueDate(input *time.Time) (DueDate, error) {
-	if input.Before(time.Now()) {
+	yesterday := time.Now().AddDate(0, 0, -1)
+	if input.Before(yesterday) {
 		return DueDate{}, fmt.Errorf("過去の日時は入力できません")
 	}
 	return DueDate{dueDate: *input}, nil

@@ -54,9 +54,10 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
                             </div>
                         </div>
                         <div className="flex justify-between items-center">
+                            <p>Due date</p>
                             <div className="mt-10 flex justify-between items-center w-[55%]">
                                 <div className="w-[45%]">
-                                    <p>Due date  From</p>
+                                    <p>From</p>
                                     <Input type="date" className="border-0 border-b-2 border-gray-400 
                                                         focus:border-blue-700 rounded-none 
                                                         shadow-none focus:outline-none focus-visible:ring-0

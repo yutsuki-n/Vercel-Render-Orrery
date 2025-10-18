@@ -5,7 +5,11 @@ export class DueDate {
     }
 
     static NewDueDate(future: Date | null): DueDate {
-        if (future && future < new Date()) {
+        const now = new Date();
+        const yesterday = new Date();
+        yesterday.setDate(now.getDate() - 1);
+        
+        if (future && future <= yesterday) {
             throw new Error("期日は現在以降の日付にしてください")
         } else {
             return new DueDate(future)
