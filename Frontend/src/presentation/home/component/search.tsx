@@ -3,6 +3,7 @@ import type { ResTodoDTO } from "../../../domain/dto/todoDTO";
 import { List } from "../../../interface/TodoController";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router";
 
 export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<React.SetStateAction<boolean>>; reroadToggle:boolean; setTodos:React.Dispatch<React.SetStateAction<ResTodoDTO[]>>;}) => {
 
@@ -14,6 +15,7 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
     const [searchDueDateTo, setSearchDueDateTo] = useState<Date | undefined>();
     const [searchCompleted, setSearchCompleted] = useState<boolean | undefined>();
     const [error, setError] = useState("");
+    const navigate = useNavigate();
     
     const searchSubmit = (e: React.FormEvent) => {
             e.preventDefault();
@@ -26,22 +28,24 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
         setSearchDueDateFrom(undefined);
         setSearchDueDateTo(undefined);
         setSearchCompleted(undefined);
-        reroad(prev => !prev); 
+        reroad(prev => !prev) 
     }
 
     useEffect( () => {
-        try {
-            (async () => {const todolist = await List(searchString, searchString, searchDueDateFrom, searchDueDateTo, searchCompleted);
-            //TodoとBodyを分けるときにはGormの改変も行うこと
-            setTodos(todolist);}) ();
-        } catch (err: any) {
-            setError(err.message || "ログインに失敗しました")
-        }
+            (async () => { try {const todolist = await List(searchString, searchString, searchDueDateFrom, searchDueDateTo, searchCompleted);
+                //TodoとBodyを分けるときにはGormの改変も行うこと
+                setTodos(todolist);
+            } catch (err: any) {
+                setError(err.message || "ログインに失敗しました")
+                if (err.message?.includes("セッション")) {
+                    navigate("/", { state: { msg: "セッションが切れました"} });
+                }
+            }}) ();
     }, [reroadToggle] );
 
     return (
         <div>
-                <form className="mt-8 w-[90%] mx-auto" onSubmit={searchSubmit}>
+            <form className="mt-8 w-[90%] mx-auto mb-15" onSubmit={searchSubmit}>
                     <h1 className="text-[25px] text-blue-800">Search</h1>     
                         <div className="flex justify-between">
                             <Input placeholder="キーワード" className="w-[45%] border-0 border-b-2 border-gray-400 
@@ -56,6 +60,7 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
                         <div className="flex justify-between items-center">
                             <div className="mt-10 w-[55%]">
                                 <p className="mb-2">Due date</p>
+            
                                 <div className="flex justify-between items-center">
                                     <div className="w-[45%]">
                                         <p>From</p>
