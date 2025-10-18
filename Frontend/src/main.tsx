@@ -12,15 +12,18 @@ import { Header } from './presentation/common/header.tsx';
 import { Footer } from './presentation/common/footer.tsx';
 
 const RootLayout = () => (
-  <>
+  <div className='flex flex-col min-h-screen'>
     <Header/>
-    <Outlet/>
+    <main className='flex-grow'>
+      <Outlet/>
+    </main>
+    
     <Footer/>
-  </>
+  </div>
 );
 
 const router = createBrowserRouter([{
-  element: <RootLayout />,
+  element: <RootLayout></RootLayout>,
   children:[
     { path: "/", Component: LogIn},
     { path: "/signup", Component: SignUp},
