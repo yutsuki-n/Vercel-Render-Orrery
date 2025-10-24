@@ -12,10 +12,11 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
     const handleComplete = async (id: string) => {
         try {
             await Toggle(id)
+            await new Promise(resolve => setTimeout(resolve, 100));
             reroad(prev =>!prev);
         } catch (err: any) {
             setError(err.message || "セッションが切れました")
-            if (err.message?.includes("セッション")) {
+            if (err.message?.includes("セッション") || err.message?.includes("トークン")) {
                 navigate("/", {state: {msg: "セッションが切れました"}});
             }
         }
@@ -28,7 +29,7 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
             reroad(prev => !prev);
         } catch (err: any) {
             setError(err.message || "セッションが切れました")
-            if (err.message?.includes("セッション")) {
+            if (err.message?.includes("セッション") || err.message?.includes("トークン")) {
                 navigate("/", {state: {msg: "セッションが切れました"}});
             }
         }
@@ -39,9 +40,10 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
         if (check) {
             try {
                 await Delete(id);
+                await new Promise(resolve => setTimeout(resolve, 100));
             } catch (err: any) {
                 setError(err.message || "セッションが切れました")
-                if (err.message?.includes("セッション")) {
+                if (err.message?.includes("セッション") || err.message?.includes("トークン")) {
                     navigate("/", {state: {msg: "セッションが切れました"}});
                 }
             }

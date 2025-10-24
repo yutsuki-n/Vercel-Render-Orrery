@@ -37,7 +37,7 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
                 setTodos(todolist);
             } catch (err: any) {
                 setError(err.message || "ログインに失敗しました")
-                if (err.message?.includes("セッション")) {
+                if (err.message?.includes("セッション") || err.message?.includes("トークン")) {
                     navigate("/", { state: { msg: "セッションが切れました"} });
                 }
             }}) ();

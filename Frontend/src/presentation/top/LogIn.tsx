@@ -9,6 +9,7 @@ export const LogIn = () => {
     const [rawPassword, setRawPassword] = useState("");
     const [error, setError] = useState("");
     const [message, setMessage] = useState<string | null>(null)
+    const [wait, setWait] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -16,6 +17,7 @@ export const LogIn = () => {
         if (location.state?.msg) {
             setMessage(location.state.msg);
             navigate(location.pathname, { replace: true});
+            setWait("");
         }
     }, [location, navigate]);
     
@@ -26,18 +28,25 @@ export const LogIn = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError("");
-        
+        setWait("now loading"); 
 
         try {
             const token = await Login(email, rawPassword);
             
             if (!token) throw new Error("メールアドレス、またはパスワードが間違っています");
 
-            localStorage.setItem("token", token);
+            const expiry = new Date().getTime() + 3 * 60 * 60 * 1000;
+
+            const tokenData = {
+                value: token,
+                expiry: expiry,
+            }
+            localStorage.setItem("token",JSON.stringify(tokenData));
             window.location.href = "/home";
         } catch (err: any) {
             setError(err.message || "ログインに失敗しました")
         }
+        await setWait("");
     }
 
 
@@ -52,6 +61,10 @@ export const LogIn = () => {
 
                 {message && (
                     <div className="text-red-500"> {message} </div>
+                )}
+
+                {wait && (
+                    <div className=""> {wait} </div>
                 )}
 
                 <div>
