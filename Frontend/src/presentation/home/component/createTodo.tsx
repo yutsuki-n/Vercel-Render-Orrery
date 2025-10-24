@@ -28,7 +28,7 @@ export const CreateForm = ({reroad, closeModal}:{reroad: React.Dispatch<React.Se
         } catch (err: any) {
             console.error("ERR:", err);
             setTError(err.message || "セッションが切れました。ログインしなおしてください")
-            if (err.message?.includes("セッション")) {
+            if (err.message?.includes("セッション") || err.message?.includes("トークン")) {
                 navigate("/", {state: {msg: "セッションが切れました"}})
                 return;
             }

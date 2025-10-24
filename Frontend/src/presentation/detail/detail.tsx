@@ -38,7 +38,7 @@ export const Detail = () => {
     } catch (err: any) {
       setError(err.message || "セッションが切れました")
 
-      if (err.message?.includes("セッション")) {
+      if (err.message?.includes("セッション") || err.message?.includes("トークン")) {
         navigate("/", { state: { msg: "セッションが切れました"} });
       }
     }
@@ -56,7 +56,7 @@ export const Detail = () => {
     } catch (err: any) {
       setError(err.message || "セッションが切れました")
 
-      if (err.message?.includes("セッション")) {
+      if (err.message?.includes("セッション") || err.message?.includes("トークン")) {
         navigate("/", { state: { msg: "セッションが切れました"} });
       }
     }

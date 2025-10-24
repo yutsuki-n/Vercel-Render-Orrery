@@ -8,20 +8,29 @@ export const SignUp = () => {
     const [email, setEmail] = useState("");
     const [rawPassword, setRawPassword] = useState("");
     const [error, setError] = useState("");
+    const [wait, setWait] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        setWait("now loading");
         try {
             const token = await Register(email, rawPassword);
             
             if (!token) throw new Error("メールアドレス、またはパスワードが間違っています");
+            
+            const expiry = new Date().getTime() + 3 * 60 * 60 * 1000;
 
-            localStorage.setItem("token", token);
+            const tokenData = {
+                value: token,
+                expiry: expiry,
+            }
+            localStorage.setItem("token",JSON.stringify(tokenData));
             window.location.href = "/home"
         } catch (err: any) {
             setError(err.message || "ログインに失敗しました")
         }
+        await setWait("");
     }
 
     return (
@@ -31,6 +40,10 @@ export const SignUp = () => {
                 
                 {error && (
                     <p className="pt-4 text-red-500">{error}</p>
+                )}
+
+                {wait && (
+                    <p className="pt-4">{wait}</p>
                 )}
 
                 <div>
