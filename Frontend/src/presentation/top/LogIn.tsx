@@ -31,6 +31,7 @@ export const LogIn = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError("");
+        setMessage("");
         setWait("now loading"); 
 
         try {
