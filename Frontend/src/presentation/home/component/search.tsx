@@ -32,7 +32,14 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
     }
 
     useEffect( () => {
-            (async () => { try {const todolist = await List(searchString, searchString, searchDueDateFrom, searchDueDateTo, searchCompleted);
+            (async () => { 
+                const now = Date.now();
+                const expiry = localStorage.getItem("token_expiry");
+                if (now > Number(expiry)) {
+                    navigate("/", { state: { msg: "セッションが切れました"} });
+                }
+                
+                try {const todolist = await List(searchString, searchString, searchDueDateFrom, searchDueDateTo, searchCompleted);
                 //TodoとBodyを分けるときにはGormの改変も行うこと
                 setTodos(todolist);
             } catch (err: any) {

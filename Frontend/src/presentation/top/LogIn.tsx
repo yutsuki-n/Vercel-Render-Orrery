@@ -26,8 +26,9 @@ export const LogIn = () => {
     },[])    
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
         setError("");
+        setMessage("");
         setWait("now loading"); 
 
         try {
@@ -37,11 +38,8 @@ export const LogIn = () => {
 
             const expiry = new Date().getTime() + 3 * 60 * 60 * 1000;
 
-            const tokenData = {
-                value: token,
-                expiry: expiry,
-            }
-            localStorage.setItem("token",JSON.stringify(tokenData));
+            localStorage.setItem("token", token);
+            localStorage.setItem("token_expiry", expiry.toString());
             window.location.href = "/home";
         } catch (err: any) {
             setError(err.message || "ログインに失敗しました")
