@@ -22,13 +22,15 @@ export const LogIn = () => {
     }, [location, navigate]);
     
     useEffect(() => {
-        ( async () => await localStorage.removeItem("token")) ();
-    },[])    
+        const path = location.pathname;
+        if (path === "/login" && location.state?.msg === "セッションが切れました") {
+            localStorage.removeItem("token");
+        }
+    },[location]);    
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault()
         setError("");
-        setMessage("");
         setWait("now loading"); 
 
         try {
@@ -36,10 +38,11 @@ export const LogIn = () => {
             
             if (!token) throw new Error("メールアドレス、またはパスワードが間違っています");
 
-            const expiry = new Date().getTime() + 3 * 60 * 60 * 1000;
+            const expiry = new Date().getTime() + 30 * 60 * 60 * 1000;
 
-            localStorage.setItem("token", token);
+            localStorage.setItem("token",token);
             localStorage.setItem("token_expiry", expiry.toString());
+
             window.location.href = "/home";
         } catch (err: any) {
             setError(err.message || "ログインに失敗しました")

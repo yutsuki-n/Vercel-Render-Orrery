@@ -38,13 +38,13 @@ export const Search = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatch<Rea
                 if (now > Number(expiry)) {
                     navigate("/", { state: { msg: "セッションが切れました"} });
                 }
-                
                 try {const todolist = await List(searchString, searchString, searchDueDateFrom, searchDueDateTo, searchCompleted);
                 //TodoとBodyを分けるときにはGormの改変も行うこと
                 setTodos(todolist);
             } catch (err: any) {
+
                 setError(err.message || "ログインに失敗しました")
-                if (err.message?.includes("セッション") || err.message?.includes("トークン")) {
+                if (err.message?.includes("セッション") || err.message?.includes("トークン") || now > Number(expiry)) {
                     navigate("/", { state: { msg: "セッションが切れました"} });
                 }
             }}) ();
