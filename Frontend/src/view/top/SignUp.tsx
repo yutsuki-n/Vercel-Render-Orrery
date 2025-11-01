@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useLoginVM } from "@/viewModel/loginVM";
+import { useSignUpVM } from "@/viewModel/signUpVM";
 
 export const SignUp = () => {
-    const vm = useLoginVM();
+    const vm = useSignUpVM();
     return (
         <>
             <div className="w-[60%] mx-auto my-5">
