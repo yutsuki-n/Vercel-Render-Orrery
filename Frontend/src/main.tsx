@@ -2,14 +2,14 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
-import { LogIn } from './presentation/top/LogIn.tsx';
-import { SignUp } from './presentation/top/SignUp.tsx';
-import { Home } from './presentation/home/home.tsx';
-import { Detail } from './presentation/detail/detail.tsx';
-import { EditProfile } from './presentation/user/edit.tsx';
-import { WithdrawApp } from './presentation/user/withdraw.tsx';
-import { Header } from './presentation/common/header.tsx';
-import { Footer } from './presentation/common/footer.tsx';
+import { LogIn } from './view/top/LogIn.tsx';
+import { SignUp } from './view/top/SignUp.tsx';
+import { Home } from './view/home/home.tsx';
+import { Detail } from './view/detail/detail.tsx';
+import { EditProfile } from './view/user/edit.tsx';
+import { WithdrawApp } from './view/user/withdraw.tsx';
+import { Header } from './view/common/header.tsx';
+import { Footer } from './view/common/footer.tsx';
 
 const RootLayout = () => (
   <>
