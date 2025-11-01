@@ -289,25 +289,21 @@ func (tc TodoController) Toggle(c echo.Context) error {
 
 func (tc TodoController) Update(c echo.Context) error {
 	userIDStr := c.Get("UserID").(string)
-	fmt.Println("いち コントローラー,userIDStr", userIDStr)
 	userID, err := valueobject.FromStringUserID(userIDStr)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	fmt.Println("2 コントローラー,userID", userID)
 
 	todoIDStr := c.Param("TodoID")
 	todoID, err := valueobject.FromStringTodoID(todoIDStr)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	fmt.Println("3 コントローラー,todoID", todoID)
 
 	var todoDTO req.UpdateTodoDTO
 	if err := c.Bind(&todoDTO); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	fmt.Println("4 コントローラー,todoDTO", todoDTO)
 
 	var title *valueobject.Title
 	if todoDTO.Title != nil {
@@ -317,7 +313,6 @@ func (tc TodoController) Update(c echo.Context) error {
 		}
 		title = &t
 	}
-	fmt.Println("5 コントローラー,title", title)
 
 	var body *valueobject.Body
 	if todoDTO.Body != nil {

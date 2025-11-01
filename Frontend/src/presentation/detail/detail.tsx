@@ -158,7 +158,7 @@ export const Detail = () => {
               type="date" value={dueDate ? dueDate?.toISOString().split("T")[0] : "" } 
               onChange={(e) => inputDueDate(e.target.value ? new Date(e.target.value) : undefined )}></Input>
 
-        <h1 className="text-[18px] pt-5 mb-2 pl-1 font-bold text-blue-800">Completed</h1>
+        <h1 className="text-[18px] pt-5 mb-2 pl-1 font-bold text-blue-800">Completed at</h1>
         <Input className="mb-5 border-0 border-b-2 border-gray-400 
                                               focus:border-blue-700 rounded-none 
                                               shadow-none focus:outline-none focus-visible:ring-0
