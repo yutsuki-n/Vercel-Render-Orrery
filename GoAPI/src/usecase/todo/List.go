@@ -3,7 +3,6 @@ package todo
 import (
 	"GoAPI/src/domain/entity"
 	"GoAPI/src/domain/repository"
-	"GoAPI/src/domain/valueobject"
 	"fmt"
 )
 
@@ -17,7 +16,7 @@ func NewListTodo(todoRepo repository.ITodoRepository) *ListTodo {
 	}
 }
 
-func (lt *ListTodo) Execute(input valueobject.ListTodoInput) (*[]entity.Todo, error) {
+func (lt *ListTodo) Execute(input repository.ListTodoInput) (*[]entity.Todo, error) {
 	todos, err := lt.todoRepo.FindByUserIDWithFilters(input)
 	if err != nil {
 		return nil, fmt.Errorf("検索エラー:%w", err)

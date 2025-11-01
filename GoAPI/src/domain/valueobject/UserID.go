@@ -25,3 +25,16 @@ func FromStringUserID(input string) (UserID, error) {
 func (u UserID) Value() string {
 	return u.userID
 }
+
+type SignInput struct {
+	Email       Email
+	RawPassword RawPassword
+}
+
+type ResetInput struct {
+	UserID         UserID
+	OldEmail       Email
+	OldRawPassword RawPassword
+	NewEmail       *Email
+	NewRawPassword *RawPassword
+}

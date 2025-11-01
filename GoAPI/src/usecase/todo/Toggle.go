@@ -5,7 +5,6 @@ import (
 	"GoAPI/src/domain/repository"
 	"GoAPI/src/domain/valueobject"
 	"fmt"
-	"time"
 )
 
 type ToggleTodo struct {
@@ -26,22 +25,9 @@ func (tg ToggleTodo) Execute(todoID valueobject.TodoID, userID valueobject.UserI
 	if todo.UserID() != userID {
 		return nil, fmt.Errorf("権限がありません")
 	}
-	fmt.Println("found todoのcompletedat", todo.CompletedAt())
 
-	if todo.CompletedAt() == nil {
-		now := time.Now()
-		completedAt, err := valueobject.NewCompletedAt(&now)
-		if err != nil {
-			return nil, fmt.Errorf("システムエラー:%w", err)
-		}
+	todo.Toggle()
 
-		fmt.Println("new completedAt", completedAt)
-		todo.SetCompletedAt(&completedAt)
-	} else {
-		todo.SetCompletedAt(nil)
-	}
-
-	fmt.Println("update to todo =", todo)
 	toggledTodo, err := tg.todoRepo.Update(todo)
 	if err != nil {
 		return nil, fmt.Errorf("システムエラー:%w", err)

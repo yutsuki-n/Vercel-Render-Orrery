@@ -33,16 +33,14 @@ func entityToTodoModel(entity entity.Todo) model.Todo {
 
 	var dueDate *time.Time
 	if entity.DueDate() != nil {
-		d := entity.DueDate().Value()
-		dueDate = &d
+		dueDate = entity.DueDate()
 	} else {
 		dueDate = nil
 	}
 
 	var completedAt *time.Time
 	if entity.CompletedAt() != nil {
-		c := entity.CompletedAt().Value()
-		completedAt = &c
+		completedAt = entity.CompletedAt()
 	} else {
 		completedAt = nil
 	}
@@ -62,42 +60,23 @@ func entityToTodoModel(entity entity.Todo) model.Todo {
 func modelToTodoEntity(model model.Todo) entity.Todo {
 	todoID, _ := valueobject.FromStringTodoID(model.TodoID)
 	userID, _ := valueobject.FromStringUserID(model.UserID)
-	title, _ := valueobject.NewTitle(model.Title)
+	title, _ := valueobject.NewString50(model.Title)
 
-	var body *valueobject.Body
+	var body *valueobject.String1000
 	if model.Body != nil {
-		b, _ := valueobject.NewBody(model.Body)
+		b, _ := valueobject.NewString1000(model.Body)
 		body = &b
 	} else {
 		body = nil
 	}
-	fmt.Println("body", body)
-
-	var dueDate *valueobject.DueDate
-	if model.DueDate != nil {
-		d := valueobject.ExistingDueDate(model.DueDate)
-		dueDate = &d
-	} else {
-		dueDate = nil
-	}
-	fmt.Println("dueDate", dueDate)
-
-	var completedAt *valueobject.CompletedAt
-	if model.CompletedAt != nil {
-		c, _ := valueobject.NewCompletedAt(model.CompletedAt)
-		completedAt = &c
-	} else {
-		completedAt = nil
-	}
-	fmt.Println("completedAt", completedAt)
 
 	return entity.NewTodo(
 		todoID,
 		userID,
 		title,
 		body,
-		dueDate,
-		completedAt,
+		model.DueDate,
+		model.CompletedAt,
 		model.CreatedAt,
 		model.UpdatedAt,
 	)
@@ -125,14 +104,14 @@ func (tq TodoRepository) FindByID(todoID valueobject.TodoID) (*entity.Todo, erro
 	return &entityTodo, nil
 }
 
-func (tq TodoRepository) FindByUserIDWithFilters(input valueobject.ListTodoInput) (*[]entity.Todo, error) {
+func (tq TodoRepository) FindByUserIDWithFilters(input repository.ListTodoInput) (*[]entity.Todo, error) {
 	todos := []model.Todo{}
 
 	query := tq.db.Model(&model.Todo{}).Where("user_id = ?", input.UserID.Value())
 	orQuery := tq.db.Model(&model.Todo{})
 
 	if input.Title != nil && input.Body != nil {
-		query = query.Where("(title LIKE ? OR Body LIKE ?)", "%"+input.Title.Value()+"%", "%"+input.Body.Value()+"%")
+		query = query.Where("(title LIKE ? OR String1000 LIKE ?)", "%"+input.Title.Value()+"%", "%"+input.Body.Value()+"%")
 	} else if input.Title != nil {
 		orQuery = orQuery.Where("title LIKE ?", "%"+input.Title.Value()+"%")
 	} else if input.Body != nil {
