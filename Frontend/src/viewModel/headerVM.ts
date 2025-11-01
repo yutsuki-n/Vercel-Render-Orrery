@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-export const headerVM = () => {
+export const useHeaderVM = () => {
     const token = localStorage.getItem("token");
 
     const [userModalOpen, setUserModalOpen] = useState(false);

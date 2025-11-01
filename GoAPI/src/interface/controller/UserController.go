@@ -66,7 +66,7 @@ func (uc *UserController) Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	fmt.Println(userDTO)
+	fmt.Println("this is GoController", userDTO)
 
 	email, err := valueobject.NewEmail(userDTO.Email)
 	if err != nil {

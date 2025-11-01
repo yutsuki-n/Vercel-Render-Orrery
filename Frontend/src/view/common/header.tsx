@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { headerVM } from "@/viewModel/headerVM";
+import { useHeaderVM } from "@/viewModel/headerVM";
 
 export const Header = () => {
-    const vm = headerVM();
+    const vm = useHeaderVM();
 
     return(
         <header className="stycky top-0 z-20 bg-blue-900 text-white 
