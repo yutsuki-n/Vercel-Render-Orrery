@@ -29,7 +29,7 @@ func (dpt *DuplicateTodo) Execute(todoID valueobject.TodoID, userID valueobject.
 	}
 
 	title := todo.Title().Value() + "のコピー"
-	titleVO, err := valueobject.NewTitle(title)
+	titleVO, err := valueobject.NewString50(title)
 	if err != nil {
 		return nil, err
 	}

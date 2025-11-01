@@ -19,7 +19,14 @@ func NewCreateTodo(todoRepo repository.ITodoRepository) *CreateTodo {
 	}
 }
 
-func (ct CreateTodo) Execute(input valueobject.CreateTodoInput) (*entity.Todo, error) {
+type CreateTodoInput struct {
+	UserID  valueobject.UserID
+	Title   valueobject.String50
+	Body    *valueobject.String1000
+	DueDate *time.Time
+}
+
+func (ct CreateTodo) Execute(input CreateTodoInput) (*entity.Todo, error) {
 	todo := entity.NewTodo(
 		valueobject.NewTodoID(),
 		input.UserID,

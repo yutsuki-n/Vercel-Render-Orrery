@@ -3,6 +3,7 @@ package controller
 
 import (
 	"GoAPI/src/domain/entity"
+	"GoAPI/src/domain/repository"
 	"GoAPI/src/domain/valueobject"
 	req "GoAPI/src/interface/dto/request"
 	res "GoAPI/src/interface/dto/response"
@@ -52,25 +53,13 @@ func entityToDTO(todo *entity.Todo) res.TodoDTO {
 		body = &b
 	}
 
-	var dueDate *time.Time
-	if todo.DueDate() != nil {
-		d := todo.DueDate().Value()
-		dueDate = &d
-	}
-
-	var completedAt *time.Time
-	if todo.CompletedAt() != nil {
-		c := todo.CompletedAt().Value()
-		completedAt = &c
-	}
-
 	return res.TodoDTO{
 		TodoID:      todo.TodoID().Value(),
 		UserID:      todo.UserID().Value(),
 		Title:       todo.Title().Value(),
 		Body:        body,
-		DueDate:     dueDate,
-		CompletedAt: completedAt,
+		DueDate:     todo.DueDate(),
+		CompletedAt: todo.CompletedAt(),
 		CreatedAt:   todo.CreatedAt(),
 		UpdatedAt:   todo.UpdatedAt(),
 	}
@@ -92,34 +81,31 @@ func (tc *TodoController) Create(c echo.Context) error {
 	}
 	fmt.Println("todoDTO", todoDTO)
 
-	title, err := valueobject.NewTitle(todoDTO.Title)
+	title, err := valueobject.NewString50(todoDTO.Title)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	var body *valueobject.Body
+	var body *valueobject.String1000
 	if todoDTO.Body != nil {
-		b, err := valueobject.NewBody(todoDTO.Body)
+		b, err := valueobject.NewString1000(todoDTO.Body)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 		}
 		body = &b
 	}
 
-	var dueDate *valueobject.DueDate
+	var dueDate *time.Time
 	if todoDTO.DueDate != nil {
 		parsedDueDate, err := time.Parse("2006-01-02", *todoDTO.DueDate)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "日時の形式で書いてください; YYYY-MM-DD"})
 		}
-		d, err := valueobject.NewDueDate(&parsedDueDate)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
-		}
-		dueDate = &d
+
+		dueDate = &parsedDueDate
 	}
 
-	input := valueobject.CreateTodoInput{
+	input := todouse.CreateTodoInput{
 		UserID:  userID,
 		Title:   title,
 		Body:    body,
@@ -196,9 +182,9 @@ func (tc TodoController) List(c echo.Context) error {
 	}
 	fmt.Println("コントローラー todoDTO", todoDTO)
 
-	var title *valueobject.Title
+	var title *valueobject.String50
 	if todoDTO.Title != nil {
-		t, err := valueobject.NewTitle(*todoDTO.Title)
+		t, err := valueobject.NewString50(*todoDTO.Title)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 		}
@@ -206,9 +192,9 @@ func (tc TodoController) List(c echo.Context) error {
 	}
 	fmt.Println("コントローラー,title", title)
 
-	var body *valueobject.Body
+	var body *valueobject.String1000
 	if todoDTO.Body != nil {
-		b, err := valueobject.NewBody(todoDTO.Body)
+		b, err := valueobject.NewString1000(todoDTO.Body)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 		}
@@ -246,7 +232,7 @@ func (tc TodoController) List(c echo.Context) error {
 	}
 	fmt.Println("コントローラー,completed", completed)
 
-	todos, err := tc.lt.Execute(valueobject.ListTodoInput{
+	todos, err := tc.lt.Execute(repository.ListTodoInput{
 		UserID:      userID,
 		Title:       title,
 		Body:        body,
@@ -305,65 +291,52 @@ func (tc TodoController) Update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	var title *valueobject.Title
+	var title *valueobject.String50
 	if todoDTO.Title != nil {
-		t, err := valueobject.NewTitle(*todoDTO.Title)
+		t, err := valueobject.NewString50(*todoDTO.Title)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 		}
 		title = &t
 	}
 
-	var body *valueobject.Body
+	var body *valueobject.String1000
 	if todoDTO.Body != nil {
-		b, err := valueobject.NewBody(todoDTO.Body)
+		b, err := valueobject.NewString1000(todoDTO.Body)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 		}
 		body = &b
 	}
-	fmt.Println("6 コントローラー,body", body)
 
-	var dueDate *valueobject.DueDate
+	var dueDate *time.Time
 	if todoDTO.DueDate != nil && *todoDTO.DueDate != "" {
-		fmt.Println("パターン１")
 		d, err := time.Parse("2006-01-02", *todoDTO.DueDate)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "日付を入力してください; YYYY-MM-DD"})
 		}
-		D, err := valueobject.NewDueDate(&d)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]string{"error": "日付を入力してください; YYYY-MM-DD"})
-		}
-		dueDate = &D
-	} else if todoDTO.DueDate != nil && *todoDTO.DueDate == "" {
-		fmt.Println("パターン２")
-		max, _ := time.Parse("2006-01-02", "9999-12-31")
-		d, _ := valueobject.NewDueDate(&max)
 		dueDate = &d
+	} else if todoDTO.DueDate != nil && *todoDTO.DueDate == "" {
+		max, _ := time.Parse("2006-01-02", "9999-12-31")
+		dueDate = &max
 	}
 
 	// fmt.Println("7 コントローラー,dueDate", dueDate)
 
-	var completedAt *valueobject.CompletedAt
+	var completedAt *time.Time
 	if todoDTO.CompletedAt != nil && *todoDTO.CompletedAt != "" {
 		pc, err := time.Parse("2006-01-02", *todoDTO.CompletedAt)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "日付を入力してください; YYYY-MM-DD"})
 		}
-		PC, err := valueobject.NewCompletedAt(&pc)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]string{"error": "日付を入力してください; YYYY-MM-DD"})
-		}
-		completedAt = &PC
+		completedAt = &pc
 	} else if todoDTO.CompletedAt != nil && *todoDTO.CompletedAt == "" {
 		min, _ := time.Parse("2006-01-02", "0001-01-01")
-		c, _ := valueobject.NewCompletedAt(&min)
-		completedAt = &c
+		completedAt = &min
 	}
 
 	fmt.Println("コントローラー", todoID, userID, title, body, dueDate, completedAt)
-	todo, err := tc.ut.Execute(valueobject.UpdateTodoInput{
+	todo, err := tc.ut.Execute(entity.UpdateTodoInput{
 		TodoID:      todoID,
 		UserID:      userID,
 		Title:       title,
