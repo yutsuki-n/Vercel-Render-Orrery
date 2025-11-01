@@ -104,18 +104,14 @@ func modelToTodoEntity(model model.Todo) entity.Todo {
 }
 
 func (tq TodoRepository) Create(todo *entity.Todo) (*entity.Todo, error) {
-	fmt.Println("hello from create, todo=", todo)
 	modelTodo := entityToTodoModel(*todo)
-	fmt.Println("modelTodo", modelTodo)
 
 	result := tq.db.Create(&modelTodo)
 	if result.Error != nil {
 		return nil, fmt.Errorf("Todo作成に失敗しました:%w", result.Error)
 	}
-	fmt.Println("created modelTodo", modelTodo)
 	entityTodo := modelToTodoEntity(modelTodo)
 
-	fmt.Println("entityTodo", entityTodo)
 	return &entityTodo, nil
 }
 
@@ -131,7 +127,6 @@ func (tq TodoRepository) FindByID(todoID valueobject.TodoID) (*entity.Todo, erro
 
 func (tq TodoRepository) FindByUserIDWithFilters(input valueobject.ListTodoInput) (*[]entity.Todo, error) {
 	todos := []model.Todo{}
-	fmt.Println("レポジトリ、input", input.Title, input.Body, input.DueDateFrom, input.DueDateTo, input.Completed)
 
 	query := tq.db.Model(&model.Todo{}).Where("user_id = ?", input.UserID.Value())
 	orQuery := tq.db.Model(&model.Todo{})

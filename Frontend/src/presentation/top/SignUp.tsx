@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Register } from "../../interface/UserController";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -7,26 +7,57 @@ import { Input } from "@/components/ui/input";
 export const SignUp = () => {
     const [email, setEmail] = useState("");
     const [rawPassword, setRawPassword] = useState("");
+    const [viewPassword, setViewPassword] = useState("");
     const [error, setError] = useState("");
     const [wait, setWait] = useState("");
     const navigate = useNavigate();
 
+    const maskTimerRef = useRef<number | null>(null);
+    
+    const handlePassword = (input: string) => {
+        if (maskTimerRef.current) {
+            clearTimeout(maskTimerRef.current);
+        }
+
+        if(input.length > viewPassword.length) {
+            const addedChar = input.slice(viewPassword.length);
+            setViewPassword(prev => {
+                if (!prev) {
+                    return addedChar;
+                } else {
+                    return prev.slice(0, -1) + "●" + addedChar;
+                }
+            });
+            setRawPassword(prev => prev + addedChar);
+            
+            maskTimerRef.current = setTimeout(() => {
+                setViewPassword(prev => {
+                        return prev.slice(0, -1) + "●";
+                })
+            }, 3000);
+
+        } else {
+            setViewPassword(prev => prev.slice(0, -1));
+            setRawPassword(prev => prev.slice(0, -1));
+        }
+    }
+
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        setError("");
         setWait("now loading");
         try {
             const token = await Register(email, rawPassword);
             
-            if (!token) throw new Error("メールアドレス、またはパスワードが間違っています");
+            if (!token) throw new Error("アカウント作成に失敗しました");
             
             const expiry = new Date().getTime() + 3 * 60 * 60 * 1000;
 
-            const tokenData = {
-                value: token,
-                expiry: expiry,
-            }
-            localStorage.setItem("token",JSON.stringify(tokenData));
-            window.location.href = "/home"
+            localStorage.setItem("token",token);
+            localStorage.setItem("token_expiry",expiry.toString());
+
+            window.location.href = "/home";                    
         } catch (err: any) {
             setError(err.message || "ログインに失敗しました")
         }
@@ -61,7 +92,7 @@ export const SignUp = () => {
                             <Input className="border-0 border-b-2 border-gray-400 
                                               focus:border-blue-700 rounded-none 
                                               shadow-none focus:outline-none focus-visible:ring-0
-                                              focus-visible:ring-offset-0 bg-transparent focus:bg-transparent"  type="text" value={rawPassword} onChange = {(e) => setRawPassword(e.target.value)} />
+                                              focus-visible:ring-offset-0 bg-transparent focus:bg-transparent"  type="text" value={viewPassword} onChange = {(e) => handlePassword(e.target.value)} />
                         </div>
                         
                         <Button className="mt-10 w-3/4 md:w-2/3 lg:w-4/7 mx-auto block bg-blue-800

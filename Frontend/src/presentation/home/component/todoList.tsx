@@ -68,13 +68,13 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
                                 </div>
                             </div>
                             <div className="flex my-2">
-                                <p className="text-[18px]">期日：</p>
+                                <p className="text-[18px]">Due date：</p>
                                 <p className="text-[18px]">{todo.due_date ? new Date(todo.due_date).toISOString().split("T")[0] : "未設定"}</p>
                             </div>
                             <div className="flex items-center">
-                                <p>Check：</p>
+                                <p>Completed：</p>
                                 <Input className="w-6 h-6 mr-10" type="checkbox" checked={ todo.completed_at != null } onChange={() => handleComplete(todo.todo_id)}></Input>
-                                <p>完了日：</p>
+                                <p>At：</p>
                                 <p>{todo.completed_at ? new Date(todo.completed_at).toISOString().split("T")[0] : "未完了"}</p>
                             </div>
                         </div>

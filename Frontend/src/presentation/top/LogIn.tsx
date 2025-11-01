@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { Login } from "../../interface/UserController";
 import { useLocation, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 export const LogIn = () => {
     const [email, setEmail] = useState("");
     const [rawPassword, setRawPassword] = useState("");
+    const [viewPassword, setViewPassword] = useState("");
     const [error, setError] = useState("");
     const [message, setMessage] = useState<string | null>(null)
     const [wait, setWait] = useState("");
@@ -27,6 +28,37 @@ export const LogIn = () => {
             localStorage.removeItem("token");
         }
     },[location]);    
+
+    const maskTimerRef = useRef<number | null>(null);
+
+    const handlePassword = (input: string) => {
+        if (maskTimerRef.current) {
+            clearTimeout(maskTimerRef.current);
+        }
+
+        if(input.length > viewPassword.length) {
+            const addedChar = input.slice(viewPassword.length);
+            setViewPassword(prev => {
+                if (!prev) {
+                    return addedChar;
+                } else {
+                    return prev.slice(0, -1) + "●" + addedChar;
+                }
+            });
+            setRawPassword(prev => prev + addedChar);
+            
+            maskTimerRef.current = setTimeout(() => {
+                setViewPassword(prev => {
+                        return prev.slice(0, -1) + "●";
+                })
+            }, 3000);
+
+        } else {
+            setViewPassword(prev => prev.slice(0, -1));
+            setRawPassword(prev => prev.slice(0, -1));
+        }
+    }
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -84,7 +116,8 @@ export const LogIn = () => {
                             <Input className="border-0 border-b-2 border-gray-400 
                                               focus:border-blue-700 rounded-none 
                                               shadow-none focus:outline-none focus-visible:ring-0
-                                              focus-visible:ring-offset-0 bg-transparent focus:bg-transparent"  type="text" value={rawPassword} onChange = {(e) => setRawPassword(e.target.value)} />
+                                              focus-visible:ring-offset-0 bg-transparent focus:bg-transparent"  
+                                              type="text" value={viewPassword} onChange = {(e) => handlePassword(e.target.value)} />
                         </div>
                         
                         <Button className="mt-10 w-3/4 md:w-2/3 lg:w-4/7 mx-auto block bg-blue-800
