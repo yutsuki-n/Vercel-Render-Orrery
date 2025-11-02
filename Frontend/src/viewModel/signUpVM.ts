@@ -1,4 +1,6 @@
-import { Register } from "@/interface/UserController";
+import { Email, RawPassword } from "@/domain/valueObject";
+import { UserFetch } from "@/infrastructure/UserFetch";
+import { RegisterUsecase } from "@/usecase/UserUsecase/Register";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -40,6 +42,17 @@ export const useSignUpVM = () => {
         }
     }
 
+    const token = localStorage.getItem("token");
+    const UF = new UserFetch(token);
+
+    const Register = async (email: string, rawPassword: string): Promise<string> => {
+        const usecase = new RegisterUsecase(UF);
+        const inputEmail = new Email(email);
+        const inputRawPassword = new RawPassword(rawPassword);
+
+        const token = await usecase.Execute(inputEmail, inputRawPassword);
+        return token;
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

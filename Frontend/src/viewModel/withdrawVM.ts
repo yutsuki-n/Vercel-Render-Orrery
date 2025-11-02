@@ -1,4 +1,6 @@
-import { Delete } from "@/interface/UserController";
+import { Email, RawPassword } from "@/domain/valueObject";
+import { UserFetch } from "@/infrastructure/UserFetch";
+import { WithdrawUsecase } from "@/usecase/UserUsecase/Withdraw";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -8,6 +10,18 @@ export const useWithdrawVM = () => {
     const [viewPassword, setViewPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+    const UF = new UserFetch(token);
+
+    const Delete = async (email: string, rawPassword: string): Promise<void> => {
+        const usecase = new WithdrawUsecase(UF);
+        const inputEmail = new Email(email);
+        const inputRawPassword = new RawPassword(rawPassword);
+
+        await usecase.Execute(inputEmail, inputRawPassword);
+
+    }
 
     const handleDelete = async (e: React.FormEvent) => {
         e.preventDefault();

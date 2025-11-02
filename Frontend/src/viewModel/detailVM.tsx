@@ -1,6 +1,7 @@
 import type { ResTodoDTO } from "@/domain/dto/todoDTO";
 import { Body, CompletedAt, DueDate, Title } from "@/domain/valueObject";
-import { Get, Update } from "@/interface/TodoController";
+import { TodoFetch } from "@/infrastructure/TodoFetch";
+import { GetUsecase, UpdateUsecase } from "@/usecase/TodoUsecase";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
@@ -17,6 +18,16 @@ export const useDetailVM = () => {
     const [dError, setDError] = useState("");
     const [cError, setCError] = useState("");
     const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+    const TF = new TodoFetch(token);
+
+    const Get = async (id: string): Promise<ResTodoDTO> => {
+        const usecase = new GetUsecase(TF);
+
+        const todo = await usecase.Execute(id);
+        return todo;
+    }
 
     useEffect( () => {
         (async () => {
@@ -40,6 +51,17 @@ export const useDetailVM = () => {
             }
         }) ();
     },[])
+
+    const Update = async (id: string, title?: string, body?: string | null, dueDate?: Date | null, completeAt?: Date | null):Promise<void> => {
+        const usecase = new UpdateUsecase(TF);
+        const inputTitle = title ? new Title(title) : undefined;
+        const inputBody = (body === undefined) ? undefined : new Body(body);
+        const inputDueDate = (dueDate === undefined) ? undefined : DueDate.NewDueDate(dueDate);
+        const inputCompletedAt = (completeAt === undefined) ? undefined : new CompletedAt(completeAt);
+
+        console.log("from controller", id, inputTitle, inputBody, inputDueDate, inputCompletedAt);
+        await usecase.Execute(id, inputTitle, inputBody, inputDueDate, inputCompletedAt);
+    }
 
     const updateSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

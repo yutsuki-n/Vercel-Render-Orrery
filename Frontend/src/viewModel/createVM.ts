@@ -1,5 +1,6 @@
 import { Title, Body, DueDate } from "@/domain/valueObject";
-import { Create } from "@/interface/TodoController";
+import { TodoFetch } from "@/infrastructure/TodoFetch";
+import { CreateUsecase } from "@/usecase/TodoUsecase";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -12,6 +13,18 @@ export const useCreateVM = ({reroad, closeModal}:{reroad: React.Dispatch<React.S
     const [title, setTitle] = useState<string>("");
     const [body, setBody] = useState<string | undefined>();
     const [dueDate, setDueDate] = useState<Date | undefined>();
+
+    const token = localStorage.getItem("token");
+    const TF = new TodoFetch(token);
+
+    const Create = async (title: string, body?: string, dueDate?: Date): Promise<void> => {
+        const usecase = new CreateUsecase(TF);
+        const inputTitle = new Title(title);
+        const inputBody = body ? new Body(body) : undefined;
+        const inputDueDate = dueDate ? DueDate.NewDueDate(dueDate) : undefined;
+
+        await usecase.Execute(inputTitle, inputBody, inputDueDate);
+    }
 
     const createSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
