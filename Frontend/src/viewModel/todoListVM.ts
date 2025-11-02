@@ -18,7 +18,6 @@ export const useTodoListVM = ({reroad}:{reroad:React.Dispatch<React.SetStateActi
     const handleComplete = async (id: string) => {
         try {
             await Toggle(id)
-            await new Promise(resolve => setTimeout(resolve, 100));
             reroad(prev =>!prev);
         } catch (err: any) {
             setError(err.message || "セッションが切れました")

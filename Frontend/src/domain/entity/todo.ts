@@ -25,6 +25,7 @@ export class Todo {
         this.title = new Title(title);
         this.body = new Body(body);
         this.dueDate = dueDate ? DueDate.FromExisting(new Date(dueDate)) : null;
+        console.log("todoに入れるのでミス")
         this.completedAt= completedAt? new CompletedAt(new Date(completedAt)) : null;
         this.createdAt = new Date(createdAt);
         this.updatedAt = new Date(updatedAt);
