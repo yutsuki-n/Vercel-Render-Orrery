@@ -29,7 +29,7 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
                                 <p>Completed：</p>
                                 <Input className="w-6 h-6 mr-10" type="checkbox" checked={ todo.CompletedAt?.Value() != null } onChange={() => vm.handleComplete(todo.TodoID)}></Input>
                                 <p>At：</p>
-                                <p>{todo.CompletedAt?.Value() ? todo.CompletedAt.Value()?.toISOString().split("T")[0] : "未完了"}</p>
+                                <p>{todo.CompletedAt ? todo.CompletedAt.Value()?.toISOString().split("T")[0] : "未完了"}</p>
                             </div>
                         </div>
                         )

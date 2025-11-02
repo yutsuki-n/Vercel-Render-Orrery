@@ -41,7 +41,7 @@ export const useSearchVM = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatc
 
         const todosDTO = await usecase.Execute(inputTitle, inputBody, inputFrom, inputTo, completed);
 
-        const todos: Todo[] = todosDTO.map(todo => 
+        const todos: Todo[] = todosDTO[0] ? todosDTO.map(todo => 
             new Todo(todo.todo_id,
                      todo.user_id,
                      todo.title,
@@ -50,7 +50,7 @@ export const useSearchVM = ({reroad,reroadToggle,setTodos}:{reroad:React.Dispatc
                      todo.completed_at,
                      todo.created_at,
                      todo.updated_at)
-        )
+        ) : [];
         return todos;
     }
 
