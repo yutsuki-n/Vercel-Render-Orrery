@@ -11,7 +11,7 @@ export const TodoList = ({reroad,todos}:{reroad:React.Dispatch<React.SetStateAct
                     <p className="pt-5 text-red-500">{vm.error}</p>
                 )}
 
-                { todos && todos.length > 0 ? (todos.map((todo) => {
+                { todos[0] && todos.length > 0 ? (todos.map((todo) => {
                     return ( 
                         <div className="w-[90%] mx-auto mt-10 border-l-2 border-blue-700 pl-3 mb-10" key={todo.TodoID} >
                             <div className="flex justify-between items-center">
