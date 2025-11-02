@@ -10,7 +10,7 @@ export class CompletedAt {
     }
 
     static validation(input: Date | null) {
-         if (input && input >= new Date()) {
+         if (input && input > new Date()) {
             throw new Error("完了日は過去の日付にしてください")
         }
     }

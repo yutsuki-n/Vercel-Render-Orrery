@@ -13,7 +13,7 @@ export const EditProfile = () => {
 
             <form className="w-[90%] mx-auto" onSubmit={vm.handleSubmit}>
                 {vm.error && (
-                    <p className="fixed top-20 text-red-500">{vm.error}</p>
+                    <p className="top-20 text-red-500">{vm.error}</p>
                 )}
                 <div>
                     <p className="text-[20px] my-4 text-blue-800 font-bold">アカウント確認</p>
