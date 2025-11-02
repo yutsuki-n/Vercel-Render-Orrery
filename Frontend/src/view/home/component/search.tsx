@@ -1,10 +1,10 @@
 import React from "react";
-import type { ResTodoDTO } from "../../../domain/dto/todoDTO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSearchVM } from "@/viewModel/searchVM";
+import type { Todo } from "@/domain/entity/todo";
 
-export const Search = ({reroad,reroadToggle,setTodos}: {reroad:React.Dispatch<React.SetStateAction<boolean>>; reroadToggle:boolean; setTodos:React.Dispatch<React.SetStateAction<ResTodoDTO[]>>;}) => {
+export const Search = ({reroad,reroadToggle,setTodos}: {reroad:React.Dispatch<React.SetStateAction<boolean>>; reroadToggle:boolean; setTodos:React.Dispatch<React.SetStateAction<Todo[]>>;}) => {
     const vm = useSearchVM({reroad,reroadToggle,setTodos});
 
     return (

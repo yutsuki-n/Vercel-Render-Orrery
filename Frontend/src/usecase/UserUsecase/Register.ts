@@ -1,6 +1,6 @@
+import type { User } from "@/domain/entity/user";
 import type { ReqSignINDTO } from "../../domain/dto/userDTO";
 import type { IUserRepository } from "../../domain/Irepository/IUserRepository";
-import type { Email, RawPassword } from "../../domain/valueObject/index";
 
 
 export class RegisterUsecase {
@@ -10,10 +10,10 @@ export class RegisterUsecase {
         this.userRepo = userRepo;
     }
 
-    async Execute(email: Email, rawPassword: RawPassword): Promise<string> {
+    async Execute(user: User): Promise<string> {
         const registerInput: ReqSignINDTO = {
-            email: email.Value(),
-            raw_password: rawPassword.Value()
+            email: user.Email.Value(),
+            raw_password: user.RawPassword.Value()
         }
 
         const Token = await this.userRepo.Create(registerInput);

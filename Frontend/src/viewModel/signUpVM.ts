@@ -1,4 +1,4 @@
-import { Email, RawPassword } from "@/domain/valueObject";
+import { User } from "@/domain/entity/user";
 import { UserFetch } from "@/infrastructure/UserFetch";
 import { RegisterUsecase } from "@/usecase/UserUsecase/Register";
 import { useRef, useState } from "react";
@@ -42,15 +42,13 @@ export const useSignUpVM = () => {
         }
     }
 
-    const token = localStorage.getItem("token");
-    const UF = new UserFetch(token);
+    const UF = new UserFetch(User.getToken());
 
     const Register = async (email: string, rawPassword: string): Promise<string> => {
         const usecase = new RegisterUsecase(UF);
-        const inputEmail = new Email(email);
-        const inputRawPassword = new RawPassword(rawPassword);
+        const inputUser = new User(email, rawPassword);
 
-        const token = await usecase.Execute(inputEmail, inputRawPassword);
+        const token = await usecase.Execute(inputUser);
         return token;
     }
 

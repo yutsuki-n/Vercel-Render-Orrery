@@ -1,3 +1,4 @@
+import { User } from "@/domain/entity/user";
 import { TodoFetch } from "@/infrastructure/TodoFetch";
 import { DeleteUsecase, DuplicateUsecase, ToggleUsecase } from "@/usecase/TodoUsecase";
 import { useState } from "react";
@@ -7,12 +8,10 @@ export const useTodoListVM = ({reroad}:{reroad:React.Dispatch<React.SetStateActi
     const navigate = useNavigate();
     const [error, setError] = useState("");
 
-    const token = localStorage.getItem("token");
-    const TF = new TodoFetch(token);
+    const TF = new TodoFetch(User.getToken());
 
     const Toggle = async (id: string): Promise<void> => {
         const usecase = new ToggleUsecase(TF);
-        console.log("hellofrom controller, id=", id)
         await usecase.Execute(id);
     }
 

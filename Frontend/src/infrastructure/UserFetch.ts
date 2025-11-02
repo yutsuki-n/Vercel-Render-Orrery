@@ -100,7 +100,6 @@ export class UserFetch implements IUserRepository {
                 body: JSON.stringify(input)
             }
        );
-       console.log("finished fetch") 
 
         if (!res.ok) {
             const errorData = await res.json();

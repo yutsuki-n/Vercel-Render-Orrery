@@ -1,6 +1,6 @@
 import type { IUserRepository } from "../../domain/Irepository/IUserRepository";
-import type { Email, RawPassword } from "../../domain/valueObject";
 import type { ReqSignINDTO } from "../../domain/dto/userDTO";
+import type { User } from "@/domain/entity/user";
 
 
 export class WithdrawUsecase {
@@ -10,12 +10,11 @@ export class WithdrawUsecase {
         this.userRepo = userRepo;
     }
 
-    async Execute(email: Email, rawPassword: RawPassword): Promise<void> {
+    async Execute(user: User): Promise<void> {
         const withdrawInput: ReqSignINDTO = {
-            email: email.Value(),
-            raw_password: rawPassword.Value()
+            email: user.Email.Value(),
+            raw_password: user.RawPassword.Value(),
         }
-        console.log("from usecase", email, rawPassword)
         await this.userRepo.Delete(withdrawInput)
     }
 }
