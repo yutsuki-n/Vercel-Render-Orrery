@@ -1,10 +1,21 @@
-import { Delete, Duplicate, Toggle } from "@/interface/TodoController";
+import { TodoFetch } from "@/infrastructure/TodoFetch";
+import { DeleteUsecase, DuplicateUsecase, ToggleUsecase } from "@/usecase/TodoUsecase";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
 export const useTodoListVM = ({reroad}:{reroad:React.Dispatch<React.SetStateAction<boolean>>;}) => {
     const navigate = useNavigate();
     const [error, setError] = useState("");
+
+    const token = localStorage.getItem("token");
+    const TF = new TodoFetch(token);
+
+    const Toggle = async (id: string): Promise<void> => {
+        const usecase = new ToggleUsecase(TF);
+        console.log("hellofrom controller, id=", id)
+        await usecase.Execute(id);
+    }
+
     const handleComplete = async (id: string) => {
         try {
             await Toggle(id)
@@ -18,6 +29,12 @@ export const useTodoListVM = ({reroad}:{reroad:React.Dispatch<React.SetStateActi
         }
     }
 
+    const Duplicate = async (id: string):Promise<void> => {
+        const usecase = new DuplicateUsecase(TF);
+
+        await usecase.Execute(id);
+    }
+
     const handleDuplicate = async (id: string) => {
         try {
             await Duplicate(id)
@@ -29,6 +46,12 @@ export const useTodoListVM = ({reroad}:{reroad:React.Dispatch<React.SetStateActi
                 navigate("/", {state: {msg: "セッションが切れました"}});
             }
         }
+    }
+
+    const Delete = async (id: string):Promise<void> => {
+        const usecase = new DeleteUsecase(TF);
+
+        await usecase.Execute(id);
     }
 
     const handleDelete = async (id: string) => {

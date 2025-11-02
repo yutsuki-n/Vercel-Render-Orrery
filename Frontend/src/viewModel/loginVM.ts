@@ -1,4 +1,6 @@
-import { Login } from "@/interface/UserController";
+import { Email, RawPassword } from "@/domain/valueObject";
+import { UserFetch } from "@/infrastructure/UserFetch";
+import { LoginUsecase } from "@/usecase/UserUsecase/Login";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 
@@ -57,6 +59,17 @@ export const useLoginVM = () => {
         }
     }
 
+    const token = localStorage.getItem("token");
+    const UF = new UserFetch(token);
+
+    const Login = async (email: string, rawPassword: string): Promise<string> => {
+        const usecase = new LoginUsecase(UF);
+        const inputEmail = new Email(email);
+        const inputRawPassword = new RawPassword(rawPassword);
+
+        const token = await usecase.Execute(inputEmail, inputRawPassword);
+        return token;
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

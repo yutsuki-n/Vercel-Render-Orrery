@@ -1,4 +1,6 @@
-import { Edit } from "@/interface/UserController";
+import { Email, RawPassword } from "@/domain/valueObject";
+import { UserFetch } from "@/infrastructure/UserFetch";
+import { EditUsecase } from "@/usecase/UserUsecase/Edit";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -12,6 +14,22 @@ export const useEditVM = () => {
     const [viewNewPassword, setViewNewPassword] = useState<string>("");
 
     const navigate = useNavigate();
+
+
+    const token = localStorage.getItem("token");
+    const UF = new UserFetch(token);
+
+    const Edit = async (oldEmail: string, oldRawPassword: string, newEmail?: string, newRawPassword?: string): Promise<string> => {
+        const usecase = new EditUsecase(UF);
+        const inputOldEmail = new Email(oldEmail);
+        const inputOldRawPassword = new RawPassword(oldRawPassword);
+        const inputNewEmail = (newEmail && newEmail != "") ? new Email(newEmail) : undefined;
+        const inputNewRawPassword = (newRawPassword && newRawPassword != "") ? new RawPassword(newRawPassword) : undefined;
+
+        console.log("from controller", inputNewEmail, inputNewRawPassword)
+        const token = await usecase.Execute(inputOldEmail, inputOldRawPassword, inputNewEmail, inputNewRawPassword);
+        return token;
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
