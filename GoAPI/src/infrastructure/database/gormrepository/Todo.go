@@ -111,7 +111,7 @@ func (tq TodoRepository) FindByUserIDWithFilters(input repository.ListTodoInput)
 	orQuery := tq.db.Model(&model.Todo{})
 
 	if input.Title != nil && input.Body != nil {
-		query = query.Where("(title LIKE ? OR String1000 LIKE ?)", "%"+input.Title.Value()+"%", "%"+input.Body.Value()+"%")
+		query = query.Where("(title LIKE ? OR body LIKE ?)", "%"+input.Title.Value()+"%", "%"+input.Body.Value()+"%")
 	} else if input.Title != nil {
 		orQuery = orQuery.Where("title LIKE ?", "%"+input.Title.Value()+"%")
 	} else if input.Body != nil {

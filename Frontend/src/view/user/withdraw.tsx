@@ -12,7 +12,7 @@ export const WithdrawApp = () => {
             </div>
             <form  onSubmit={vm.handleDelete}>
                 {vm.error && (
-                    <p className="fixed top-20 text-red-500">{vm.error}</p>
+                    <p className="top-20 text-red-500">{vm.error}</p>
                 )}
                 <p className="my-4 text-[20px] text-blue-800 font-bold mb-10">アカウント削除</p>
                 <p className="text-xs">メールアドレス</p>

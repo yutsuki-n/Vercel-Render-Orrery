@@ -9,8 +9,6 @@ export class ToggleUsecase {
     }
 
     async Execute(id: string): Promise<void> {
-
-        console.log("hello from usecase, id=",id)
         await this.todoRepo.Toggle(id)
     }
 }
