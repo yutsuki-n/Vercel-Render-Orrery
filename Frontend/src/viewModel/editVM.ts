@@ -1,3 +1,4 @@
+import { User } from "@/domain/entity/user";
 import { Email, RawPassword } from "@/domain/valueObject";
 import { UserFetch } from "@/infrastructure/UserFetch";
 import { EditUsecase } from "@/usecase/UserUsecase/Edit";
@@ -15,19 +16,16 @@ export const useEditVM = () => {
 
     const navigate = useNavigate();
 
-
-    const token = localStorage.getItem("token");
-    const UF = new UserFetch(token);
+    const UF = new UserFetch(User.getToken());
 
     const Edit = async (oldEmail: string, oldRawPassword: string, newEmail?: string, newRawPassword?: string): Promise<string> => {
         const usecase = new EditUsecase(UF);
-        const inputOldEmail = new Email(oldEmail);
-        const inputOldRawPassword = new RawPassword(oldRawPassword);
+        const inputOldUser = new User(oldEmail, oldRawPassword);
         const inputNewEmail = (newEmail && newEmail != "") ? new Email(newEmail) : undefined;
         const inputNewRawPassword = (newRawPassword && newRawPassword != "") ? new RawPassword(newRawPassword) : undefined;
 
         console.log("from controller", inputNewEmail, inputNewRawPassword)
-        const token = await usecase.Execute(inputOldEmail, inputOldRawPassword, inputNewEmail, inputNewRawPassword);
+        const token = await usecase.Execute(inputOldUser, inputNewEmail, inputNewRawPassword);
         return token;
     }
 

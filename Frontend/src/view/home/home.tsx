@@ -1,12 +1,12 @@
 import { useState } from "react"
-import type { ResTodoDTO } from "../../domain/dto/todoDTO";
 import { CreateModal } from "./component/modal";
 import { Search } from "./component/search";
 import { TodoList } from "./component/todoList";
+import type { Todo } from "@/domain/entity/todo";
 
 export const Home = () => {
 
-    const [todos, setTodos] = useState<ResTodoDTO[]>([]);
+    const [todos, setTodos] = useState<Todo[]>([]);
     const [reroadToggle, reroad] = useState<boolean>(true);
 
     return(

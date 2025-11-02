@@ -1,3 +1,4 @@
+import { User } from "@/domain/entity/user";
 import { Title, Body, DueDate } from "@/domain/valueObject";
 import { TodoFetch } from "@/infrastructure/TodoFetch";
 import { CreateUsecase } from "@/usecase/TodoUsecase";
@@ -14,8 +15,7 @@ export const useCreateVM = ({reroad, closeModal}:{reroad: React.Dispatch<React.S
     const [body, setBody] = useState<string | undefined>();
     const [dueDate, setDueDate] = useState<Date | undefined>();
 
-    const token = localStorage.getItem("token");
-    const TF = new TodoFetch(token);
+    const TF = new TodoFetch(User.getToken());
 
     const Create = async (title: string, body?: string, dueDate?: Date): Promise<void> => {
         const usecase = new CreateUsecase(TF);

@@ -1,4 +1,4 @@
-import { Email, RawPassword } from "@/domain/valueObject";
+import { User } from "@/domain/entity/user";
 import { UserFetch } from "@/infrastructure/UserFetch";
 import { WithdrawUsecase } from "@/usecase/UserUsecase/Withdraw";
 import { useRef, useState } from "react";
@@ -11,15 +11,13 @@ export const useWithdrawVM = () => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const token = localStorage.getItem("token");
-    const UF = new UserFetch(token);
+    const UF = new UserFetch(User.getToken());
 
     const Delete = async (email: string, rawPassword: string): Promise<void> => {
         const usecase = new WithdrawUsecase(UF);
-        const inputEmail = new Email(email);
-        const inputRawPassword = new RawPassword(rawPassword);
+        const inputUser = new User(email, rawPassword);
 
-        await usecase.Execute(inputEmail, inputRawPassword);
+        await usecase.Execute(inputUser);
 
     }
 

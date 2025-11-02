@@ -1,4 +1,5 @@
-import type { ResTodoDTO } from "@/domain/dto/todoDTO";
+import type { Todo } from "@/domain/entity/todo";
+import { User } from "@/domain/entity/user";
 import { Body, CompletedAt, DueDate, Title } from "@/domain/valueObject";
 import { TodoFetch } from "@/infrastructure/TodoFetch";
 import { GetUsecase, UpdateUsecase } from "@/usecase/TodoUsecase";
@@ -7,7 +8,7 @@ import { useNavigate, useParams } from "react-router";
 
 export const useDetailVM = () => {
     const { id } = useParams<{id: string}>();
-    const [todo, setTodo] = useState<ResTodoDTO>();
+    const [todo, setTodo] = useState<Todo>();
     const [title, setTitle] = useState<string>();
     const [body, setBody] = useState<string | null>();
     const [dueDate, setDueDate] = useState<Date | null>();
@@ -19,10 +20,9 @@ export const useDetailVM = () => {
     const [cError, setCError] = useState("");
     const navigate = useNavigate();
 
-    const token = localStorage.getItem("token");
-    const TF = new TodoFetch(token);
+    const TF = new TodoFetch(User.getToken());
 
-    const Get = async (id: string): Promise<ResTodoDTO> => {
+    const Get = async (id: string): Promise<Todo> => {
         const usecase = new GetUsecase(TF);
 
         const todo = await usecase.Execute(id);
@@ -34,13 +34,13 @@ export const useDetailVM = () => {
             if (!id) return <p>不正なアクセスです</p>;
             try { const foundTodo = await Get(id);
                 setTodo(foundTodo);
-                setTitle(foundTodo.title);
-                setBody(foundTodo.body);
-                if (foundTodo.due_date) {
-                    setDueDate(new Date(foundTodo.due_date))
+                setTitle(foundTodo.Title.Value());
+                setBody(foundTodo.Body?.Value());
+                if (foundTodo.DueDate) {
+                    setDueDate(foundTodo.DueDate.Value())
                 }
-                if (foundTodo.completed_at) {
-                    setCompletedAt(new Date(foundTodo.completed_at))
+                if (foundTodo.CompletedAt) {
+                    setCompletedAt(foundTodo.CompletedAt.Value())
                 }
             } catch (err: any) {
                 setError(err.message || "セッションが切れました")

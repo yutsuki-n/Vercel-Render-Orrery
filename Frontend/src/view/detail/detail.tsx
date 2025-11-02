@@ -14,8 +14,8 @@ export const Detail = () => {
       <div className="flex justify-between">
         <h2 className="text-[25px] text-blue-800" >Details</h2>
         <div className="text-right w-[80%] mx-auto text-blue-900">
-          <p>作成日：{new Date(vm.todo.created_at).toISOString().split("T")[0] }</p>
-          <p>最終更新日：{new Date(vm.todo.updated_at).toISOString().split("T")[0] }</p>
+          <p>作成日：{new Date(vm.todo.CreatedAt).toISOString().split("T")[0] }</p>
+          <p>最終更新日：{new Date(vm.todo.UpdatedAt).toISOString().split("T")[0] }</p>
         </div>
       </div>
       <div className="flex justify-between w-[90%] mx-auto mt-8 items-center">

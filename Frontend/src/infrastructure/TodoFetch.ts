@@ -78,8 +78,6 @@ export class TodoFetch implements ITodoRepository {
 
         const query = params.toString()
         
-        console.log("hello from fetch", `${this.baseURL}?${params.toString()}`)
-
         const url = query ? `${this.baseURL}?${params.toString()}` : this.baseURL;
 
         const res = await fetch(
@@ -130,7 +128,6 @@ export class TodoFetch implements ITodoRepository {
             throw new Error("セッションが切れました。ログインしなおしてください")
          }
 
-        console.log("hello from fetchupdt, input=", input, "jsonInput=",JSON.stringify(input))
         const res = await fetch(
             `${this.baseURL}/${id}`,
             {
